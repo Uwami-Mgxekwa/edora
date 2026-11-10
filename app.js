@@ -188,17 +188,26 @@ window.closeSidebar = () => {
 
 // ── Navigation config ─────────────────────────────────────────
 const NAV = [
-  { id:'dash',        label:'Dashboard',         icon:'home',         section:'main'    },
-  { id:'subjects',    label:'My Subjects',        icon:'book',         section:'main'    },
-  { id:'assignments', label:'Assignments',        icon:'clipboardList',section:'main'    },
-  { id:'materials',   label:'Learning Materials', icon:'folder',       section:'main'    },
-  { id:'missed',      label:'I Missed School',    icon:'calendar',     section:'main'    },
-  { id:'ai',          label:'EDORA AI',           icon:'sparkles',     section:'tools'   },
-  { id:'planner',     label:'Study Planner',      icon:'clock',        section:'tools'   },
-  { id:'progress',    label:'Academic Progress',  icon:'barChart',     section:'tools'   },
-  { id:'notifs',      label:'Notifications',      icon:'bell',         section:'account' },
-  { id:'profile',     label:'Profile & Settings', icon:'settings',     section:'account' }
+  { id:'dash',        label:'Dashboard',         icon:'home',         section:'main',    file:'dashboard.html'     },
+  { id:'subjects',    label:'My Subjects',        icon:'book',         section:'main',    file:'mysubjects.html'    },
+  { id:'assignments', label:'Assignments',        icon:'clipboardList',section:'main',    file:'assignments.html'   },
+  { id:'materials',   label:'Learning Materials', icon:'folder',       section:'main',    file:'materials.html'     },
+  { id:'missed',      label:'I Missed School',    icon:'calendar',     section:'main',    file:'missed.html'        },
+  { id:'ai',          label:'EDORA AI',           icon:'sparkles',     section:'tools',   file:'ai.html'            },
+  { id:'planner',     label:'Study Planner',      icon:'clock',        section:'tools',   file:'planner.html'       },
+  { id:'progress',    label:'Academic Progress',  icon:'barChart',     section:'tools',   file:'progress.html'      },
+  { id:'notifs',      label:'Notifications',      icon:'bell',         section:'account', file:'notifications.html' },
+  { id:'profile',     label:'Profile & Settings', icon:'settings',     section:'account', file:'profile.html'       }
 ];
+
+// Map page IDs to their HTML files (for inline links)
+const PAGE_FILE = {
+  dash: 'dashboard.html', subjects: 'mysubjects.html', assignments: 'assignments.html',
+  materials: 'materials.html', missed: 'missed.html', ai: 'ai.html',
+  planner: 'planner.html', progress: 'progress.html', notifs: 'notifications.html',
+  profile: 'profile.html'
+};
+const pageHref = id => PAGE_FILE[id] || 'dashboard.html';
 const SECTION_LABELS = { main:'Learn', tools:'Plan', account:'Account' };
 
 // ── Shared partials ───────────────────────────────────────────
@@ -364,8 +373,8 @@ const R = {
             : `<div class="hero-badge">${icon('checkCircle')} You are all caught up. Great work!</div>`}
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          ${overdue.length ? `<a href="#assignments" class="btn" style="text-decoration:none;background:var(--danger);color:#fff;gap:6px">${icon('alertTriangle')} ${overdue.length} Overdue</a>` : ''}
-          <a href="#missed" class="btn" style="text-decoration:none;gap:6px">${icon('calendar')} I missed school</a>
+          ${overdue.length ? `<a href="assignments.html" class="btn" style="text-decoration:none;background:var(--danger);color:#fff;gap:6px">${icon('alertTriangle')} ${overdue.length} Overdue</a>` : ''}
+          <a href="missed.html" class="btn" style="text-decoration:none;gap:6px">${icon('calendar')} I missed school</a>
         </div>
       </div>
     </div>
@@ -406,7 +415,7 @@ const R = {
               </div>
             </li>`).join('')}
         </ul>` : `<div class="empty"><div class="empty-icon" style="opacity:.4">${icon('checkSquare',36)}</div><div class="empty-text">No pending assignments!</div></div>`}
-        <a href="#assignments" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View all assignments ${icon('arrowRight')}</a>
+        <a href="assignments.html" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View all assignments ${icon('arrowRight')}</a>
       </div>
 
       <div class="card">
@@ -419,10 +428,10 @@ const R = {
         </div>
         <h2 style="margin-bottom:10px">Quick access</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="#assignments" class="btn sec sm" style="text-decoration:none;gap:5px">${icon('clipboardList')} Assignments</a>
-          <a href="#planner"     class="btn sec sm" style="text-decoration:none;gap:5px">${icon('clock')} Planner</a>
-          <a href="#ai"          class="btn sec sm" style="text-decoration:none;gap:5px">${icon('sparkles')} EDORA AI</a>
-          <a href="#missed"      class="btn sec sm" style="text-decoration:none;gap:5px">${icon('calendar')} Missed school</a>
+          <a href="assignments.html" class="btn sec sm" style="text-decoration:none;gap:5px">${icon('clipboardList')} Assignments</a>
+          <a href="planner.html"     class="btn sec sm" style="text-decoration:none;gap:5px">${icon('clock')} Planner</a>
+          <a href="ai.html"          class="btn sec sm" style="text-decoration:none;gap:5px">${icon('sparkles')} EDORA AI</a>
+          <a href="missed.html"      class="btn sec sm" style="text-decoration:none;gap:5px">${icon('calendar')} Missed school</a>
         </div>
       </div>
 
@@ -438,7 +447,7 @@ const R = {
               <span style="font-size:12px;color:var(--text-secondary);flex-shrink:0">${fd(l.d)}</span>
             </li>`).join('')}
         </ul>
-        <a href="#missed" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View full lesson log ${icon('arrowRight')}</a>
+        <a href="missed.html" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View full lesson log ${icon('arrowRight')}</a>
       </div>
 
       <div class="card">
@@ -453,7 +462,7 @@ const R = {
               <button class="btn sec sm" data-a="viewMat" data-v="${m.id}">Open</button>
             </li>`).join('')}
         </ul>
-        <a href="#materials" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View all materials ${icon('arrowRight')}</a>
+        <a href="materials.html" class="btn sec sm" style="text-decoration:none;margin-top:12px;display:inline-flex;gap:4px">View all materials ${icon('arrowRight')}</a>
       </div>
 
     </div>
@@ -483,7 +492,7 @@ const R = {
       const AN = D.ann.filter(a => a.s === id);
       return `
         <div style="margin-bottom:20px">
-          <a href="#subjects" class="btn ghost sm" style="text-decoration:none;display:inline-flex;margin-bottom:12px;gap:4px">${icon('arrowLeft')} All Subjects</a>
+          <a href="mysubjects.html" class="btn ghost sm" style="text-decoration:none;display:inline-flex;margin-bottom:12px;gap:4px">${icon('arrowLeft')} All Subjects</a>
           <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
             <div style="width:52px;height:52px;border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">${SUBJ_ICONS[s.id] || icon('book',22)}</div>
             <div>
@@ -545,7 +554,7 @@ const R = {
       </div>
       <div class="grid g3">
         ${D.subjects.map(s => `
-          <a href="#subjects/${s.id}" class="subject-card card-hover" style="text-decoration:none">
+          <a href="mysubjects.html#subjects/${s.id}" class="subject-card card-hover" style="text-decoration:none">
             <div style="width:44px;height:44px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:4px;color:var(--text-secondary)">${SUBJ_ICONS[s.id] || icon('book',22)}</div>
             <div class="subject-name">${s.n}</div>
             <div class="subject-teacher">${s.t}</div>
@@ -567,7 +576,7 @@ const R = {
           <h1>Assignments</h1>
           <p>${p.n} of ${p.t} completed · ${p.pct}% done</p>
         </div>
-        <a href="#missed" class="btn sec sm" style="text-decoration:none;gap:5px">${icon('calendar')} Catch-up mode</a>
+        <a href="missed.html" class="btn sec sm" style="text-decoration:none;gap:5px">${icon('calendar')} Catch-up mode</a>
       </div>
       <div style="margin-bottom:4px">${bar(p.pct)}</div>
       <div class="filters">
@@ -687,7 +696,7 @@ const R = {
         ${outstanding.length
           ? `<p style="font-size:12.5px;color:var(--text-secondary);margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,216,77,.4)">
                Also outstanding overall: ${outstanding.length} assignment${outstanding.length !== 1 ? 's' : ''}.
-               <a href="#assignments" style="color:var(--warning);font-weight:600">View all</a>
+               <a href="assignments.html" style="color:var(--warning);font-weight:600">View all</a>
              </p>`
           : ''}
       </div>`;
@@ -819,7 +828,7 @@ const R = {
               <div style="margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;gap:16px"><span>Completed</span><strong>${p.n}</strong></div>
               <div style="margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;gap:16px"><span>Outstanding</span><strong>${out.length}</strong></div>
               <div style="font-size:13px;display:flex;justify-content:space-between;gap:16px"><span>Total</span><strong>${p.t}</strong></div>
-              <a href="#assignments" class="btn sm" style="text-decoration:none;margin-top:12px;display:inline-flex">View assignments</a>
+              <a href="assignments.html" class="btn sm" style="text-decoration:none;margin-top:12px;display:inline-flex">View assignments</a>
             </div>
           </div>
         </div>
@@ -855,7 +864,7 @@ const R = {
           <ul class="ul">
             <li><span style="display:flex;align-items:center;gap:7px">${icon('star')} First graded assignment</span><span class="chip success">Unlocked</span></li>
             <li><span style="display:flex;align-items:center;gap:7px">${icon('zap')} 3-day study streak</span><span class="chip success">Unlocked</span></li>
-            <li><span style="display:flex;align-items:center;gap:7px">${icon('star')} English above 80%</span><span class="chip success">Unlocked</span></li>
+            <li><span style="display:flex;align-items:center;gap:7px">${icon('star')} E-Business above 80%</span><span class="chip success">Unlocked</span></li>
             <li><span style="display:flex;align-items:center;gap:7px">${icon('book')} All materials viewed</span><span class="chip warning">In progress</span></li>
             <li><span style="display:flex;align-items:center;gap:7px">${icon('target')} 100% completion rate</span><span class="chip">Not yet</span></li>
           </ul>
@@ -877,7 +886,7 @@ const R = {
               <div><div style="font-weight:600">${best.n}</div><div style="font-size:12.5px;color:var(--text-secondary)">${best.p}% — keep it up!</div></div>
             </div>
           </div>
-          <a href="#planner" class="btn sec sm" style="text-decoration:none;margin-top:14px;display:inline-flex;gap:5px">${icon('clock')} Plan a session</a>
+          <a href="planner.html" class="btn sec sm" style="text-decoration:none;margin-top:14px;display:inline-flex;gap:5px">${icon('clock')} Plan a session</a>
         </div>
       </div>`;
   },
@@ -940,7 +949,7 @@ const R = {
               <div><label>Email address</label><input name="email" type="email" value="${escHtml(u.email)}" required></div>
               <div><label>School</label><input name="school" value="${escHtml(u.school || '')}"></div>
               <div><label>Grade</label>
-                <select name="grade">${['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12'].map(g=>`<option ${g===u.grade?'selected':''}>${g}</option>`).join('')}</select>
+                <select name="grade">${['First Year','Second Year'].map(g=>`<option ${g===u.grade?'selected':''}>${g}</option>`).join('')}</select>
               </div>
             </div>
             <span class="err" id="profile-err"></span>
@@ -1139,7 +1148,7 @@ function go() {
       lastSection = n.section;
     }
     const unr = n.id === 'notifs' && unread();
-    html += `<a href="#${n.id}" class="${n.id === activeId ? 'on' : ''}">
+    html += `<a href="${n.file}" class="${n.id === activeId ? 'on' : ''}">
       <span class="nav-icon">${icon(n.icon)}</span>
       ${n.label}
       ${unr ? `<span class="nav-dot">${unread()}</span>` : ''}

@@ -525,7 +525,7 @@
   }
 
   // ── Redirect if already logged in ──────────────────────────────
-  if (S.auth && S.user) location.href = 'index.html';
+  if (S.auth && S.user) location.href = 'dashboard.html';
 
   // ── 3D flip between Sign in and Create account ────────────────
   const flipper  = document.getElementById('flipper');
@@ -583,7 +583,7 @@
       S.auth = 1;
       if (!S.user) S.user = { name: 'Lethabo Sithole', email: 'demo@edora.app', school: 'EDORA University', grade: 'Second Year', pic: '' };
       save();
-      return location.href = 'index.html';
+      return location.href = 'dashboard.html';
     }
 
     // Registered accounts
@@ -593,7 +593,7 @@
       S.auth = 1;
       S.user = { name: found.name, email: found.email, school: found.school, grade: found.grade, pic: '' };
       save();
-      return location.href = 'index.html';
+      return location.href = 'dashboard.html';
     }
 
     err.textContent = 'Incorrect email or password.';
@@ -627,7 +627,7 @@
     S.auth = 1;
     S.user = { name, email, school, grade, pic: '' };
     save();
-    location.href = 'index.html';
+    location.href = 'dashboard.html';
   });
 </script>
 </body>

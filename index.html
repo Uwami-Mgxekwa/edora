@@ -42,7 +42,7 @@
   </nav>
 
   <div class="sb-bottom">
-    <a href="#profile" class="sb-user" id="sb-user">
+    <a href="profile.html" class="sb-user" id="sb-user">
       <div class="av" id="sb-av"></div>
       <div class="sb-user-info">
         <div class="sb-user-name" id="sb-uname"></div>
@@ -86,13 +86,13 @@
         </svg>
       </button>
 
-      <a href="#notifs" class="icon-btn" id="notif-btn" title="Notifications" style="text-decoration:none">
+      <a href="notifications.html" class="icon-btn" id="notif-btn" title="Notifications" style="text-decoration:none">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
         <span class="notif-badge" id="notif-badge" style="display:none"></span>
       </a>
-      <a href="#profile" class="av" id="top-av" style="text-decoration:none" title="Profile"></a>
+      <a href="profile.html" class="av" id="top-av" style="text-decoration:none" title="Profile"></a>
     </div>
   </header>
 
@@ -107,6 +107,9 @@
 </div>
 
 <script src="mock-data.js"></script>
+<script>
+  if (!location.hash || location.hash === '#') location.hash = '#dash';
+</script>
 <script src="app.js"></script>
 </body>
 </html>
