@@ -335,7 +335,17 @@ const SUBJ_ICONS = {
   ebus2: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
 };
 
-// Notification kind → icon name
+// Map each module ID to its thumbnail image
+const SUBJ_IMG = {
+  prog1: 'assets/images/modules/pexels-arturoaez225-18734876.jpg',
+  dbms1: 'assets/images/modules/pexels-peaky-29445973.jpg',
+  arch1: 'assets/images/modules/pexels-nicolas-foster-65973708-14844846.jpg',
+  prog2: 'assets/images/modules/pexels-deepanker70-1482061.jpg',
+  web2:  'assets/images/modules/pexels-peaky-31343630.jpg',
+  sad2:  'assets/images/modules/pexels-sora-shimazaki-5926382.jpg',
+  ai2:   'assets/images/modules/pexels-thirdman-5257579.jpg',
+  ebus2: 'assets/images/modules/pexels-zayedhossain120-36706460.jpg',
+};
 const notifIcon = k => ({
   'Assignment':   'clipboardList',
   'New Material': 'folder',
@@ -555,14 +565,18 @@ const R = {
       <div class="grid g3">
         ${D.subjects.map(s => `
           <a href="mysubjects.html#subjects/${s.id}" class="subject-card card-hover" style="text-decoration:none">
-            <div style="width:44px;height:44px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:4px;color:var(--text-secondary)">${SUBJ_ICONS[s.id] || icon('book',22)}</div>
-            <div class="subject-name">${s.n}</div>
-            <div class="subject-teacher">${s.t}</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-              <span style="font-size:12px;color:var(--text-secondary)">Progress</span>
-              <span style="font-size:13px;font-weight:700">${s.p}%</span>
+            <div class="subject-card-thumb" style="background-image:url('${SUBJ_IMG[s.id]}')">
+              <div class="subject-card-year">${s.year === 1 ? 'Year 1' : 'Year 2'}</div>
             </div>
-            ${bar(s.p)}
+            <div class="subject-card-body">
+              <div class="subject-name">${s.n}</div>
+              <div class="subject-teacher">${s.t}</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+                <span style="font-size:12px;color:var(--text-secondary)">Progress</span>
+                <span style="font-size:13px;font-weight:700">${s.p}%</span>
+              </div>
+              ${bar(s.p)}
+            </div>
           </a>`).join('')}
       </div>`;
   },
