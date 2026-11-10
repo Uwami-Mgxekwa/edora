@@ -1,5 +1,5 @@
 # Navigate to your repo folder
-Set-Location -Path "C:\Users\Josh\Documents\GITHUB\brelinx-learn"
+Set-Location -Path "C:\Users\ZiloTech\Desktop\LEARN"
 
 # Apply git speed optimizations
 git config core.fsyncObjectFiles false
@@ -40,18 +40,14 @@ $msgs = @(
     "fix 404 redirect on logout"
 )
 
-$total = 986
+$total = 996
 
 for ($i = 1; $i -le $total; $i++) {
-    # Pick message safely
-    $msg = $msgs[($i - 1) % $msgs.Length]
+    # Pick message
+    $msg = $msgs[$i % $msgs.Length]
 
     # Append change to test.txt
-    if ($i -eq 1) {
-        "update $i" | Out-File -FilePath "test.txt"
-    } else {
-        Add-Content -Path "test.txt" -Value "update $i"
-    }
+    Add-Content -Path "test.txt" -Value "update $i"
 
     # Stage and commit
     git add test.txt
