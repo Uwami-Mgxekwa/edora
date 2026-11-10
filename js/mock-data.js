@@ -11,15 +11,15 @@ const D = {
 
   subjects: [
     // ── First Year ──────────────────────────────────────────
-    { id:'prog1',  n:'Introduction to Programming',           t:'Mr. T. Dlamini',   e:'t.dlamini@edora.ac.za',   p:74, color:'#FFF3C0', desc:'Fundamentals of programming: variables, control flow, functions, and basic data structures using Python.',      year:1 },
-    { id:'dbms1',  n:'Intro to Database Management Systems',  t:'Ms. N. Khumalo',   e:'n.khumalo@edora.ac.za',   p:68, color:'#DCFCE7', desc:'Relational databases, SQL queries, entity-relationship modelling, and normalisation.',                           year:1 },
-    { id:'arch1',  n:'Computer Architecture',                 t:'Mr. J. Botha',     e:'j.botha@edora.ac.za',     p:61, color:'#DBEAFE', desc:'Number systems, logic gates, CPU design, memory hierarchy, and instruction set architecture.',                   year:1 },
+    { id:'prog1',  n:'Introduction to Programming',           t:'Mr. Owami',   e:'owami@edora.ac.za',   p:74, color:'#FFF3C0', desc:'Fundamentals of programming: variables, control flow, functions, and basic data structures using Python.',      year:1 },
+    { id:'dbms1',  n:'Intro to Database Management Systems',  t:'Mr. Owami',   e:'owami@edora.ac.za',   p:68, color:'#DCFCE7', desc:'Relational databases, SQL queries, entity-relationship modelling, and normalisation.',                           year:1 },
+    { id:'arch1',  n:'Computer Architecture',                 t:'Mr. Owami',   e:'owami@edora.ac.za',   p:61, color:'#DBEAFE', desc:'Number systems, logic gates, CPU design, memory hierarchy, and instruction set architecture.',                   year:1 },
     // ── Second Year ─────────────────────────────────────────
-    { id:'prog2',  n:'Advanced Programming',                  t:'Dr. P. Naidoo',    e:'p.naidoo@edora.ac.za',    p:71, color:'#FCE7F3', desc:'Object-oriented design, data structures, algorithms, complexity analysis, and design patterns.',                 year:2 },
-    { id:'web2',   n:'Web Development',                       t:'Mr. R. Smith',     e:'r.smith@edora.ac.za',     p:79, color:'#E0E7FF', desc:'HTML, CSS, JavaScript, responsive design, RESTful APIs, and modern front-end frameworks.',                       year:2 },
-    { id:'sad2',   n:'System Analysis and Design',            t:'Ms. L. Sithole',   e:'l.sithole@edora.ac.za',   p:65, color:'#FEE2E2', desc:'SDLC methodologies, requirements engineering, UML modelling, and system design documentation.',                  year:2 },
-    { id:'ai2',    n:'Artificial Intelligence',               t:'Dr. K. Mokoena',   e:'k.mokoena@edora.ac.za',   p:58, color:'#F3E8FF', desc:'Search algorithms, knowledge representation, machine learning fundamentals, and neural networks.',               year:2 },
-    { id:'ebus2',  n:'E-Business',                            t:'Mrs. A. van Wyk',  e:'a.vanwyk@edora.ac.za',    p:83, color:'#ECFDF5', desc:'Digital commerce models, online payment systems, e-marketing, and cybersecurity in business contexts.',          year:2 }
+    { id:'prog2',  n:'Advanced Programming',                  t:'Mr. Owami',   e:'owami@edora.ac.za',   p:71, color:'#FCE7F3', desc:'Object-oriented design, data structures, algorithms, complexity analysis, and design patterns.',                 year:2 },
+    { id:'web2',   n:'Web Development',                       t:'Mr. Owami',   e:'owami@edora.ac.za',   p:79, color:'#E0E7FF', desc:'HTML, CSS, JavaScript, responsive design, RESTful APIs, and modern front-end frameworks.',                       year:2 },
+    { id:'sad2',   n:'System Analysis and Design',            t:'Mr. Owami',   e:'owami@edora.ac.za',   p:65, color:'#FEE2E2', desc:'SDLC methodologies, requirements engineering, UML modelling, and system design documentation.',                  year:2 },
+    { id:'ai2',    n:'Artificial Intelligence',               t:'Mr. Owami',   e:'owami@edora.ac.za',   p:58, color:'#F3E8FF', desc:'Search algorithms, knowledge representation, machine learning fundamentals, and neural networks.',               year:2 },
+    { id:'ebus2',  n:'E-Business',                            t:'Mr. Owami',   e:'owami@edora.ac.za',   p:83, color:'#ECFDF5', desc:'Digital commerce models, online payment systems, e-marketing, and cybersecurity in business contexts.',          year:2 }
   ],
 
   assignments: [
@@ -99,11 +99,11 @@ const D = {
   notifs: [
     { id:1, k:'Assignment',   t:'Number Systems Conversion Sheet is overdue. Submit as soon as possible.',                                 d:day(0)  },
     { id:2, k:'Assignment',   t:'Python Functions Exercise is due in 3 days. You have marked it as in progress.',                          d:day(0)  },
-    { id:3, k:'New Material', t:'Mr. Dlamini uploaded: Python Basics — Variables and Data Types.',                                         d:day(-1) },
-    { id:4, k:'Announcement', t:'Mr. Dlamini: bring your laptop to every lab session this week.',                                          d:day(-1) },
+    { id:3, k:'New Material', t:'Mr. Owami uploaded: Python Basics — Variables and Data Types.',                                           d:day(-1) },
+    { id:4, k:'Announcement', t:'Mr. Owami: bring your laptop to every lab session this week.',                                            d:day(-1) },
     { id:5, k:'Assessment',   t:'Programming Fundamentals Test in 6 days. The study guide is in your Learning Materials.',                 d:day(-1) },
-    { id:6, k:'New Material', t:'Big-O Complexity Analysis Tutorial video uploaded by Dr. Naidoo.',                                        d:day(0)  },
-    { id:7, k:'Announcement', t:'Ms. Khumalo: SQL assignment schema is now on the LMS. Download before Thursday.',                        d:day(-2) },
+    { id:6, k:'New Material', t:'Big-O Complexity Analysis Tutorial video uploaded by Mr. Owami.',                                         d:day(0)  },
+    { id:7, k:'Announcement', t:'Mr. Owami: SQL assignment schema is now on the LMS. Download before Thursday.',                          d:day(-2) },
     { id:8, k:'Assessment',   t:'Number Systems Quiz in 9 days. Review binary, hex conversions and logic gates.',                         d:day(-2) }
   ]
 };

@@ -504,7 +504,11 @@ const R = {
         <div style="margin-bottom:20px">
           <a href="mysubjects.html" class="btn ghost sm" style="text-decoration:none;display:inline-flex;margin-bottom:12px;gap:4px">${icon('arrowLeft')} All Subjects</a>
           <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-            <div style="width:52px;height:52px;border-radius:14px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">${SUBJ_ICONS[s.id] || icon('book',22)}</div>
+            <div style="width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;border:1px solid var(--border)">
+              ${SUBJ_IMG[s.id]
+                ? `<img src="${SUBJ_IMG[s.id]}" alt="${escHtml(s.n)}" style="width:100%;height:100%;object-fit:cover">`
+                : `<div style="width:100%;height:100%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">${SUBJ_ICONS[s.id] || icon('book',22)}</div>`}
+            </div>
             <div>
               <h1>${s.n}</h1>
               <p>${s.t} · <a href="mailto:${s.e}" style="color:var(--text-secondary)">${s.e}</a></p>

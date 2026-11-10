@@ -802,8 +802,6 @@ textarea { resize: vertical; min-height: 90px; }
 .subject-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   text-decoration: none;
@@ -812,20 +810,62 @@ textarea { resize: vertical; min-height: 90px; }
   background: var(--background);
   position: relative;
   overflow: hidden;
-}
-
-.subject-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 60%, rgba(255,216,77,.08));
-  pointer-events: none;
+  gap: 0;
+  padding: 0;
 }
 
 .subject-card:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--primary-muted);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+}
+
+/* Thumbnail banner */
+.subject-card-thumb {
+  width: 100%;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Dark scrim so the year badge sits cleanly */
+.subject-card-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.45) 100%);
+}
+
+/* Year 1 / Year 2 badge over the image */
+.subject-card-year {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0,0,0,0.38);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 100px;
+  padding: 3px 9px;
+}
+
+/* Text body below the image */
+.subject-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.subject-card:hover .subject-card-thumb {
+  filter: brightness(1.05);
 }
 
 .subject-emoji {
@@ -1211,6 +1251,9 @@ textarea { resize: vertical; min-height: 90px; }
 }
 [data-theme="dark"] .subject-card:hover {
   border-color: #332900;
+}
+[data-theme="dark"] .subject-card-thumb::after {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 100%);
 }
 
 /* Notifications unread */
