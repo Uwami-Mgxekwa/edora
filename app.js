@@ -283,42 +283,47 @@ const plItem = p => `
 
 // ── AI bot ────────────────────────────────────────────────────
 const BOT = [
-  [/quadratic|factori|roots|discriminant/i,
-   'For quadratics write in standard form ax² + bx + c = 0. Try factorising: find two numbers that multiply to <em>ac</em> and add to <em>b</em>. If that fails use the formula: x = (−b ± √(b²−4ac)) / 2a. Always check the discriminant first.'],
-  [/newton|f\s*=\s*ma|acceleration|free.?body/i,
-   "<strong>F = ma</strong> — net force equals mass × acceleration. For free-body diagrams: draw every force, find the resultant, then apply F = ma. Direction matters — choose a positive direction first."],
-  [/mitosis|meiosis|cell.div|prophase|pmat/i,
-   'Mitosis → <strong>2 identical diploid cells</strong> (growth/repair). Meiosis → <strong>4 haploid cells</strong> (gametes). Stages: <strong>PMAT</strong> — Prophase, Metaphase, Anaphase, Telophase. Crossing over happens in Prophase 1 of meiosis.'],
-  [/essay|paragraph|thesis|conclusion|introduction/i,
-   '<strong>Essay structure:</strong> Introduction (hook + background + clear thesis) → 3 Body paragraphs (Point → Evidence → Explain) → Conclusion (restate thesis + broader significance). One idea per body paragraph.'],
-  [/contour|gradient|topograph|map skill/i,
-   'Close contour lines = <strong>steep gradient</strong>. Wide spacing = gentle slope. V-shapes point upstream for rivers. Gradient = vertical interval ÷ horizontal distance (same units).'],
-  [/hdi|human.?development|inequality|poverty/i,
-   'HDI measures three dimensions: <strong>health</strong> (life expectancy), <strong>education</strong> (schooling years), <strong>income</strong> (GNI per capita). Scale 0–1. Very high = above 0.8.'],
+  [/python|function|recursion|loop|variable|list|dict|tuple/i,
+   'In Python: <strong>functions</strong> use <code>def</code>, <strong>recursion</strong> needs a base case (e.g. factorial: if n==0 return 1). Lists are mutable; tuples immutable; dictionaries give O(1) lookup. Always test with edge cases like 0 or empty inputs.'],
+  [/sql|join|select|query|database|table|normaliz/i,
+   '<strong>SQL JOINs:</strong> INNER JOIN returns matching rows in both tables; LEFT JOIN keeps all rows from the left. For normalisation — 1NF: atomic values; 2NF: no partial dependencies; 3NF: no transitive dependencies. Each step reduces redundancy.'],
+  [/binary|hex|octal|number.?system|convert|logic.?gate|boolean/i,
+   '<strong>Number conversion:</strong> Binary → Hex: group 4 bits from the right. Hex → Decimal: multiply each digit by 16^position. Logic gates: AND (both true), OR (one true), NOT (inverts). De Morgan\'s law: NOT(A AND B) = NOT A OR NOT B.'],
+  [/linked.?list|stack|queue|data.?struct|big.?o|complex|oop|object|class|inherit/i,
+   '<strong>Big-O:</strong> O(1) constant → O(log n) binary search → O(n) linear scan → O(n²) nested loops. Linked list insert at head is O(1); search is O(n). OOP pillars: encapsulation, inheritance, polymorphism, abstraction.'],
+  [/html|css|javascript|dom|responsive|flexbox|grid|web/i,
+   '<strong>Responsive CSS:</strong> <code>grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))</code> creates flexible layouts. Use Flexbox for one-dimension, Grid for two. Media queries: 768px tablet breakpoint, 480px mobile. Always test on small screens first.'],
+  [/use.?case|uml|sdlc|requirement|system.?design|analysis/i,
+   '<strong>Use Case Diagrams:</strong> Actors are outside the system boundary (rectangles). Use cases are ovals. <em>Include</em> = mandatory sub-step. <em>Extend</em> = optional step triggered by a condition. The SDLC phases: Planning → Analysis → Design → Implementation → Testing → Maintenance.'],
+  [/bfs|dfs|search|graph|algorithm|heuristic|a\*|neural|machine.?learn|ai/i,
+   '<strong>BFS</strong> uses a queue (FIFO) — visits all neighbours before going deeper; best for shortest path in unweighted graphs. <strong>DFS</strong> uses a stack (LIFO) — goes as deep as possible first. Both run in O(V+E) time where V = vertices, E = edges.'],
+  [/e.?business|e.?commerce|revenue|digital.?market|payment|online.?store/i,
+   '<strong>E-business models:</strong> B2C (business to consumer), B2B, C2C (like marketplace sellers). Revenue streams: transaction fees, subscriptions, advertising, freemium. South African examples: Takealot (transaction fee), Naspers/PayU (payments). Always consider cybersecurity and trust.'],
   [/plan|schedule|study|revise|time.manag|pomodoro/i,
-   'Try <strong>Pomodoro</strong>: 25-min focused session, 5-min break, long break every 4 sessions. Add sessions in the Study Planner. Hardest subject first when fresh. One session per subject per day before a test.'],
+   'Try <strong>Pomodoro</strong>: 25-min focused session, 5-min break, long break every 4 sessions. Add sessions in the Study Planner. Hardest module first when you\'re fresh. One session per module per day before an assessment.'],
   [/miss|absent|catch.?up/i,
    'Open <strong>I Missed School</strong> in the sidebar, choose your absent dates, and EDORA builds a personalised catch-up plan — lessons first, then materials, then assignments.'],
-  [/poem|poetry|device|imagery|tone|metaphor|simile/i,
-   'Key devices: <strong>imagery</strong> (senses), <strong>metaphor</strong> (direct comparison), <strong>simile</strong> (like/as), <strong>tone</strong> (attitude — look at word choice). Always back analysis with a quotation from the text.'],
-  [/trig|sin|cos|tan|sohcahtoa/i,
-   '<strong>SOHCAHTOA</strong>: Sin=Opp/Hyp · Cos=Adj/Hyp · Tan=Opp/Adj. Key graph values: sin 90°=1, cos 0°=1, tan 45°=1. For shifted graphs: y = a·sin(bx + c) + d.'],
 ];
 
 const botReply = q => {
   const m = BOT.find(([rx]) => rx.test(q));
-  return m ? m[1] : "I can help with maths, physical sciences, life sciences, English, geography, study planning and catching up after absence. What would you like help with?";
+  return m ? m[1] : "I can help with programming, databases, computer architecture, web development, AI, system analysis, e-business, study planning, and catching up after absence. What would you like help with?";
 };
 
 // ============================================================
 //  SUBJECT ICONS  (SVG instead of emoji)
 // ============================================================
 const SUBJ_ICONS = {
-  math: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`,
-  eng:  `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
-  phys: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>`,
-  life: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 1 9 9c0 4.17-2.84 7.67-6.72 8.65"/><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.72 8.65"/><line x1="12" y1="2" x2="12" y2="22"/><path d="M12 7c2 2 4 3 7 3M12 7c-2 2-4 3-7 3M12 14c2-2 4-3 7-3M12 14c-2-2-4-3-7-3"/></svg>`,
-  geo:  `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  // First Year
+  prog1: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  dbms1: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`,
+  arch1: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>`,
+  // Second Year
+  prog2: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="10" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  web2:  `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  sad2:  `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+  ai2:   `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 1 9 9c0 4.17-2.84 7.67-6.72 8.65"/><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.72 8.65"/><line x1="12" y1="2" x2="12" y2="22"/><path d="M12 7c2 2 4 3 7 3M12 7c-2 2-4 3-7 3M12 14c2-2 4-3 7-3M12 14c-2-2-4-3-7-3"/></svg>`,
+  ebus2: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
 };
 
 // Notification kind → icon name
@@ -719,7 +724,7 @@ const R = {
           </div>
           <div class="msgs" id="msgs">${chatHTML()}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;flex-shrink:0">
-            ${['How do I solve quadratics?','Explain mitosis','Essay structure tips','I missed school — help me catch up','How to study for a test?','What is HDI?']
+            ${['How do I write a Python function?','Explain BFS vs DFS','SQL JOIN examples','How does normalisation work?','What is Big-O complexity?','Explain e-business models']
               .map(q => `<button class="btn sec sm" data-a="aiAsk" data-v="${escHtml(q)}">${q}</button>`).join('')}
           </div>
           <form class="chat-form" data-f="chat" style="flex-shrink:0">

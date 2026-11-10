@@ -333,6 +333,31 @@
     }
     [data-theme="dark"] .glass-foot { border-top-color: rgba(255, 255, 255, 0.08); }
 
+    /* ── Powered by credit ────────────────────────────────────── */
+    .powered-by {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--text-primary);
+      opacity: 0.58;
+    }
+    .powered-by a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.18s ease;
+    }
+    .powered-by a:hover { opacity: 2; text-decoration: underline; text-underline-offset: 2px; }
+    .powered-by img {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      border-radius: 3px;
+      opacity: 0.65;
+    }
+
     /* ── Reduced motion: the flip becomes a calm cross-fade ───── */
     @media (prefers-reduced-motion: reduce) {
       body.rm .flipper { transition: opacity 0.25s ease, height 0.4s ease; transform: none !important; }
@@ -389,14 +414,6 @@
             <p>Sign in to continue to your EDORA dashboard.</p>
           </div>
 
-          <div class="demo-box">
-            <strong>Demo</strong>
-            <div class="demo-creds">
-              <span>email <span class="demo-code">demo@edora.app</span></span>
-              <span>pass <span class="demo-code">demo1234</span></span>
-            </div>
-          </div>
-
           <form id="login-form" novalidate>
             <div class="field">
               <label for="login-email">Email address</label>
@@ -420,9 +437,9 @@
             New to EDORA? <b>Create an account</b>
           </button>
 
-          <div class="glass-foot">
-            This is a demonstration prototype.<br>
-            No real data is stored. All information lives in your browser.
+          <div class="powered-by">
+            <img src="uwami-logo.png" alt="Uwami Mgxekwa logo">
+            powered by <a href="https://uwamimgxekwa.com" target="_blank" rel="noopener noreferrer">uwami mgxekwa</a>
           </div>
         </div>
 
@@ -464,11 +481,8 @@
                 <label for="reg-grade">Grade</label>
                 <select id="reg-grade" name="grade" class="glass-input" required>
                   <option value="">Select</option>
-                  <option>Grade 8</option>
-                  <option>Grade 9</option>
-                  <option selected>Grade 10</option>
-                  <option>Grade 11</option>
-                  <option>Grade 12</option>
+                  <option>First Year</option>
+                  <option selected>Second Year</option>
                 </select>
               </div>
             </div>
@@ -487,9 +501,9 @@
             Already have an account? <b>Sign in</b>
           </button>
 
-          <div class="glass-foot">
-            This is a demonstration prototype.<br>
-            No real data is stored. All information lives in your browser.
+          <div class="powered-by">
+            <img src="uwami-logo.png" alt="Uwami Mgxekwa logo">
+            powered by <a href="https://uwamimgxekwa.com" target="_blank" rel="noopener noreferrer">uwami mgxekwa</a>
           </div>
         </div>
 
@@ -567,7 +581,7 @@
     // Demo account
     if (email === 'demo@edora.app' && pass === 'demo1234') {
       S.auth = 1;
-      if (!S.user) S.user = { name: 'Lethabo Sithole', email: 'demo@edora.app', school: 'Greenfield High School', grade: 'Grade 10', pic: '' };
+      if (!S.user) S.user = { name: 'Lethabo Sithole', email: 'demo@edora.app', school: 'EDORA University', grade: 'Second Year', pic: '' };
       save();
       return location.href = 'index.html';
     }
@@ -582,7 +596,7 @@
       return location.href = 'index.html';
     }
 
-    err.textContent = 'Incorrect email or password. Try the demo account above.';
+    err.textContent = 'Incorrect email or password.';
   });
 
   // ── Create account ─────────────────────────────────────────────

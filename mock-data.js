@@ -10,98 +10,121 @@ const today = day(0);
 const D = {
 
   subjects: [
-    { id:'math', n:'Mathematics',       t:'Mr. K. Dlamini',   e:'k.dlamini@greenfield.edu',   p:72, color:'#FFF3C0', desc:'Algebra, functions, trigonometry and analytical geometry.' },
-    { id:'eng',  n:'English Home Lang', t:'Mrs. P. Naidoo',   e:'p.naidoo@greenfield.edu',    p:81, color:'#DBEAFE', desc:'Literature, language structures, writing and comprehension.' },
-    { id:'phys', n:'Physical Sciences', t:'Mr. J. Botha',     e:'j.botha@greenfield.edu',     p:64, color:'#FCE7F3', desc:'Mechanics, waves, electricity and chemical reactions.' },
-    { id:'life', n:'Life Sciences',     t:'Ms. N. Khumalo',   e:'n.khumalo@greenfield.edu',   p:77, color:'#DCFCE7', desc:'Cell biology, genetics, ecology and evolution.' },
-    { id:'geo',  n:'Geography',         t:'Mr. R. Smith',     e:'r.smith@greenfield.edu',     p:69, color:'#E0E7FF', desc:'Physical geography, map skills and development geography.' }
+    // ── First Year ──────────────────────────────────────────
+    { id:'prog1',  n:'Introduction to Programming',           t:'Mr. T. Dlamini',   e:'t.dlamini@edora.ac.za',   p:74, color:'#FFF3C0', desc:'Fundamentals of programming: variables, control flow, functions, and basic data structures using Python.',      year:1 },
+    { id:'dbms1',  n:'Intro to Database Management Systems',  t:'Ms. N. Khumalo',   e:'n.khumalo@edora.ac.za',   p:68, color:'#DCFCE7', desc:'Relational databases, SQL queries, entity-relationship modelling, and normalisation.',                           year:1 },
+    { id:'arch1',  n:'Computer Architecture',                 t:'Mr. J. Botha',     e:'j.botha@edora.ac.za',     p:61, color:'#DBEAFE', desc:'Number systems, logic gates, CPU design, memory hierarchy, and instruction set architecture.',                   year:1 },
+    // ── Second Year ─────────────────────────────────────────
+    { id:'prog2',  n:'Advanced Programming',                  t:'Dr. P. Naidoo',    e:'p.naidoo@edora.ac.za',    p:71, color:'#FCE7F3', desc:'Object-oriented design, data structures, algorithms, complexity analysis, and design patterns.',                 year:2 },
+    { id:'web2',   n:'Web Development',                       t:'Mr. R. Smith',     e:'r.smith@edora.ac.za',     p:79, color:'#E0E7FF', desc:'HTML, CSS, JavaScript, responsive design, RESTful APIs, and modern front-end frameworks.',                       year:2 },
+    { id:'sad2',   n:'System Analysis and Design',            t:'Ms. L. Sithole',   e:'l.sithole@edora.ac.za',   p:65, color:'#FEE2E2', desc:'SDLC methodologies, requirements engineering, UML modelling, and system design documentation.',                  year:2 },
+    { id:'ai2',    n:'Artificial Intelligence',               t:'Dr. K. Mokoena',   e:'k.mokoena@edora.ac.za',   p:58, color:'#F3E8FF', desc:'Search algorithms, knowledge representation, machine learning fundamentals, and neural networks.',               year:2 },
+    { id:'ebus2',  n:'E-Business',                            t:'Mrs. A. van Wyk',  e:'a.vanwyk@edora.ac.za',    p:83, color:'#ECFDF5', desc:'Digital commerce models, online payment systems, e-marketing, and cybersecurity in business contexts.',          year:2 }
   ],
 
   assignments: [
-    { id:1,  s:'math', t:'Quadratic Equations Worksheet',    d:'Solve questions 1–15. Show all working and check each answer by substitution.',               due:day(2),   g:day(-3),  st:'In progress', pr:'High'   },
-    { id:2,  s:'eng',  t:'Essay: My Role Model',             d:'Write a 400-word essay on a person who inspires you. Focus on impact, not just achievements.', due:day(5),   g:day(-2),  st:'Not started', pr:'Medium' },
-    { id:3,  s:'phys', t:"Newton's Laws Lab Report",         d:"Write a formal lab report on the trolley experiment. Include hypothesis, results table, and conclusion.", due:day(-1),  g:day(-6),  st:'Not started', pr:'High'   },
-    { id:4,  s:'life', t:'Cell Division Diagram',            d:'Draw and fully label the four stages of mitosis. Use colour to distinguish chromosomes.',       due:day(4),   g:day(-1),  st:'Not started', pr:'Low'    },
-    { id:5,  s:'geo',  t:'Topographic Map Work',             d:'Complete the contour map skills exercise on pages 34–38 of your workbook.',                    due:day(-4),  g:day(-9),  st:'Submitted',   pr:'Medium' },
-    { id:6,  s:'math', t:'Trigonometry Test Corrections',    d:'Redo all questions you got wrong in the November test. Write out the correct working.',         due:day(-8),  g:day(-12), st:'Graded',      pr:'High'   },
-    { id:7,  s:'eng',  t:'Poetry Analysis: "The Road Not Taken"', d:'Identify and analyse two poetic devices (imagery and tone). Support each with a quotation.', due:day(7),   g:day(0),   st:'Not started', pr:'Medium' },
-    { id:8,  s:'life', t:'Ecology Research Task',            d:'Research a local endangered species. Explain the threats it faces and suggest two conservation strategies.', due:day(10), g:day(1),   st:'Not started', pr:'Low'    },
-    { id:9,  s:'phys', t:'Electric Circuits Problem Set',    d:'Solve questions 1–8 on series and parallel circuits. Show all formulae and substitutions.',    due:day(3),   g:day(-1),  st:'In progress', pr:'Medium' },
-    { id:10, s:'geo',  t:'Development Geography Essay',      d:'Compare the Human Development Index of two countries. Discuss causes of inequality.',          due:day(14),  g:day(2),   st:'Not started', pr:'Low'    }
+    // ── First Year ──────────────────────────────────────────
+    { id:1,  s:'prog1', t:'Python Functions Exercise',               d:'Write five functions covering: factorial, Fibonacci, palindrome check, list reversal, and a basic calculator. Include docstrings and test cases.',                       due:day(3),   g:day(-3),  st:'In progress', pr:'High'   },
+    { id:2,  s:'dbms1', t:'ER Diagram: Library System',              d:'Design an entity-relationship diagram for a university library. Identify at least six entities, their attributes, and all relationships with cardinalities.',           due:day(5),   g:day(-2),  st:'Not started', pr:'Medium' },
+    { id:3,  s:'arch1', t:'Number Systems Conversion Sheet',         d:'Convert the following between binary, octal, hexadecimal, and decimal. Show all working. 20 questions — refer to the tutorial slides for the method.',               due:day(-1),  g:day(-6),  st:'Not started', pr:'High'   },
+    { id:4,  s:'prog1', t:'Control Flow Programming Task',           d:'Write a Python program using loops and conditionals to simulate a simple ATM: deposit, withdraw, check balance, and exit. Handle invalid inputs.',                   due:day(7),   g:day(-1),  st:'Not started', pr:'Low'    },
+    { id:5,  s:'dbms1', t:'SQL Query Assignment',                    d:'Write SQL SELECT, JOIN, GROUP BY, and subquery statements against the provided student database schema. Submit a .sql file and a screenshot of each result.',         due:day(-4),  g:day(-9),  st:'Submitted',   pr:'Medium' },
+    // ── Second Year ─────────────────────────────────────────
+    { id:6,  s:'prog2', t:'Linked List Implementation',              d:'Implement a singly linked list in Java with insert, delete, search, and reverse operations. Include JUnit tests for each method.',                                   due:day(-8),  g:day(-12), st:'Graded',      pr:'High'   },
+    { id:7,  s:'web2',  t:'Responsive Portfolio Page',               d:'Build a personal portfolio using HTML5 and CSS3. Must be fully responsive (mobile-first), use Flexbox or Grid, and pass the W3C validator with no errors.',           due:day(6),   g:day(0),   st:'Not started', pr:'Medium' },
+    { id:8,  s:'sad2',  t:'Use Case Diagram — Online Store',         d:'Model the use cases for a basic e-commerce checkout flow. Include at least eight use cases, actors, include/extend relationships, and a written description.',       due:day(10),  g:day(1),   st:'Not started', pr:'Low'    },
+    { id:9,  s:'ai2',   t:'BFS and DFS Implementation',              d:'Implement breadth-first search and depth-first search in Python on an adjacency-list graph. Trace both algorithms on the given graph and compare their outputs.',   due:day(2),   g:day(-1),  st:'In progress', pr:'Medium' },
+    { id:10, s:'ebus2', t:'E-Business Model Analysis Report',        d:'Choose a South African e-commerce company and analyse its business model: revenue streams, digital marketing strategy, payment security, and growth opportunities.', due:day(14),  g:day(2),   st:'Not started', pr:'Low'    }
   ],
 
   materials: [
-    { id:1,  s:'math', t:'Quadratic Equations — Full Notes',       y:'PDF Notes',    d:day(-2),  size:'1.2 MB' },
-    { id:2,  s:'math', t:'Factorising Trinomials Explained',       y:'Video',        d:day(-4),  size:'18 min' },
-    { id:3,  s:'math', t:'Trigonometry Summary Sheet',             y:'Study Guide',  d:day(-7),  size:'380 KB' },
-    { id:4,  s:'eng',  t:'Poetry Terms and Devices Glossary',      y:'Study Guide',  d:day(-1),  size:'520 KB' },
-    { id:5,  s:'eng',  t:'Essay Structure and Paragraph Writing',  y:'PDF Notes',    d:day(-5),  size:'890 KB' },
-    { id:6,  s:'eng',  t:'Set Poetry Anthology',                   y:'Reading',      d:day(-3),  size:'2.1 MB' },
-    { id:7,  s:'phys', t:"Forces and Newton's Laws — Slides",      y:'Presentation', d:day(-3),  size:'4.5 MB' },
-    { id:8,  s:'phys', t:'Lab Report Template and Guidelines',     y:'Study Guide',  d:day(-6),  size:'310 KB' },
-    { id:9,  s:'phys', t:'Electric Circuits Lecture Notes',        y:'PDF Notes',    d:day(-1),  size:'1.8 MB' },
-    { id:10, s:'life', t:'Mitosis and Meiosis Illustrated Notes',  y:'PDF Notes',    d:day(-1),  size:'2.3 MB' },
-    { id:11, s:'life', t:'Cell Cycle Animation',                   y:'Video',        d:day(0),   size:'12 min' },
-    { id:12, s:'life', t:'Ecology and Biomes Study Guide',         y:'Study Guide',  d:day(-8),  size:'1.1 MB' },
-    { id:13, s:'geo',  t:'Reading Contour Lines and Gradients',    y:'PDF Notes',    d:day(-5),  size:'970 KB' },
-    { id:14, s:'geo',  t:'Map Skills Workbook Answers',            y:'Reading',      d:day(-10), size:'1.4 MB' },
-    { id:15, s:'geo',  t:'Development Geography Presentation',     y:'Presentation', d:day(-2),  size:'6.1 MB' }
+    // prog1
+    { id:1,  s:'prog1', t:'Python Basics — Variables and Data Types',   y:'PDF Notes',    d:day(-2),  size:'980 KB' },
+    { id:2,  s:'prog1', t:'Functions and Scope Explained',              y:'Video',        d:day(-4),  size:'22 min' },
+    { id:3,  s:'prog1', t:'Control Flow Cheat Sheet',                   y:'Study Guide',  d:day(-7),  size:'340 KB' },
+    // dbms1
+    { id:4,  s:'dbms1', t:'Entity-Relationship Modelling Notes',        y:'PDF Notes',    d:day(-1),  size:'1.4 MB' },
+    { id:5,  s:'dbms1', t:'SQL Fundamentals — SELECT to JOIN',          y:'Study Guide',  d:day(-5),  size:'760 KB' },
+    { id:6,  s:'dbms1', t:'Database Normalisation Lecture Slides',      y:'Presentation', d:day(-3),  size:'3.2 MB' },
+    // arch1
+    { id:7,  s:'arch1', t:'Number Systems and Conversions Guide',       y:'Study Guide',  d:day(-3),  size:'520 KB' },
+    { id:8,  s:'arch1', t:'Logic Gates and Boolean Algebra Notes',      y:'PDF Notes',    d:day(-6),  size:'1.1 MB' },
+    { id:9,  s:'arch1', t:'CPU Architecture Overview Slides',           y:'Presentation', d:day(-1),  size:'5.0 MB' },
+    // prog2
+    { id:10, s:'prog2', t:'OOP Design Patterns — Factory and Singleton',y:'PDF Notes',    d:day(-1),  size:'1.7 MB' },
+    { id:11, s:'prog2', t:'Big-O Complexity Analysis Tutorial',         y:'Video',        d:day(0),   size:'18 min' },
+    // web2
+    { id:12, s:'web2',  t:'CSS Grid and Flexbox Layout Guide',          y:'Study Guide',  d:day(-5),  size:'890 KB' },
+    { id:13, s:'web2',  t:'Intro to JavaScript — DOM Manipulation',     y:'PDF Notes',    d:day(-2),  size:'1.3 MB' },
+    // sad2
+    { id:14, s:'sad2',  t:'UML Diagram Types Reference Sheet',          y:'Study Guide',  d:day(-8),  size:'670 KB' },
+    // ai2
+    { id:15, s:'ai2',   t:'Search Algorithms — BFS, DFS, A* Notes',    y:'PDF Notes',    d:day(-4),  size:'1.5 MB' },
+    // ebus2
+    { id:16, s:'ebus2', t:'E-Commerce Business Models Overview',        y:'Presentation', d:day(-10), size:'4.1 MB' }
   ],
 
   lessons: [
-    { id:1,  d:day(-1),  s:'life', topic:'Stages of Mitosis',              notes:'Prophase, metaphase, anaphase, telophase — PMAT. Chromosomes line up at the equator in metaphase.' },
-    { id:2,  d:day(-1),  s:'eng',  topic:'Imagery and Tone in Poetry',     notes:'Imagery appeals to the senses. Find three examples. Tone is the speaker\'s attitude — look at word choice.' },
-    { id:3,  d:day(-2),  s:'math', topic:'Solving Quadratics by Factorising', notes:'Standard form first: ax² + bx + c = 0. Find factors, check with the product-sum method.' },
-    { id:4,  d:day(-2),  s:'phys', topic:"Newton's Second Law",            notes:'F = ma. Covered examples 3–6 in class. Remember: net force, not just applied force.' },
-    { id:5,  d:day(-3),  s:'geo',  topic:'Contour Lines and Gradient',     notes:'Close contour lines = steep gradient. Wide spacing = gentle gradient. V-shapes point upstream.' },
-    { id:6,  d:day(-3),  s:'math', topic:'The Quadratic Formula',          notes:'Use when factorising fails. Check the discriminant b²–4ac first to predict the number of roots.' },
-    { id:7,  d:day(-4),  s:'life', topic:'Meiosis vs Mitosis',             notes:'Mitosis: 2 identical diploid cells. Meiosis: 4 genetically unique haploid cells. Crossing over in meiosis 1.' },
-    { id:8,  d:day(-4),  s:'phys', topic:'Series vs Parallel Circuits',    notes:'Series: same current, voltages add. Parallel: same voltage, currents add. Total resistance differs.' },
-    { id:9,  d:day(-5),  s:'eng',  topic:'Essay Planning and Structure',   notes:'Introduction (thesis), three body paragraphs (point–evidence–explain), conclusion (link back).' },
-    { id:10, d:day(-5),  s:'geo',  topic:'Human Development Index',        notes:'HDI uses life expectancy, education, and GNI per capita. Scale 0–1. Very high: above 0.8.' },
-    { id:11, d:day(-6),  s:'math', topic:'Functions and Parabolas',        notes:'f(x) = a(x+p)² + q. Identify a (shape), p (horizontal shift), q (vertical shift).' },
-    { id:12, d:day(-7),  s:'life', topic:'Ecology: Food Chains and Webs',  notes:'Producers → primary → secondary → tertiary consumers. Energy lost at each level (~90%).' }
+    { id:1,  d:day(-1),  s:'prog1', topic:'Functions and Recursion',                  notes:'A function calls itself with a base case to stop recursion. Example: factorial(n) = n × factorial(n-1). Always define the base case first.' },
+    { id:2,  d:day(-1),  s:'dbms1', topic:'SQL JOINs',                                notes:'INNER JOIN returns matching rows in both tables. LEFT JOIN returns all rows from left plus matches. Practice the library schema queries.' },
+    { id:3,  d:day(-2),  s:'arch1', topic:'Binary and Hexadecimal Conversion',        notes:'Binary to hex: group 4 bits from the right, convert each group. Hex to decimal: multiply each digit by 16^position.' },
+    { id:4,  d:day(-2),  s:'prog2', topic:'Linked Lists',                             notes:'Each node stores data and a pointer to the next node. Head points to first node; last node points to null. Insertion at head is O(1).' },
+    { id:5,  d:day(-3),  s:'web2',  topic:'Responsive Design with CSS Grid',          notes:'grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) creates flexible columns. Use media queries for breakpoints at 768px and 480px.' },
+    { id:6,  d:day(-3),  s:'sad2',  topic:'Use Case Diagrams',                        notes:'Actors are outside the system boundary. Use cases are ovals. Include = mandatory step. Extend = optional step triggered by condition.' },
+    { id:7,  d:day(-4),  s:'ai2',   topic:'Breadth-First Search',                     notes:'BFS uses a queue (FIFO). Visits all neighbours at current depth before going deeper. Time complexity O(V+E). Used for shortest path in unweighted graphs.' },
+    { id:8,  d:day(-4),  s:'ebus2', topic:'E-Commerce Revenue Models',                notes:'Models: subscription, transaction fee, advertising, freemium. South African examples: Takealot (transaction), News24 (advertising + subscription).' },
+    { id:9,  d:day(-5),  s:'prog1', topic:'Lists, Tuples, and Dictionaries',          notes:'List: ordered, mutable. Tuple: ordered, immutable. Dictionary: key-value pairs, O(1) lookup. Use dict.get(key, default) to avoid KeyError.' },
+    { id:10, d:day(-5),  s:'dbms1', topic:'Normalisation — 1NF to 3NF',              notes:'1NF: atomic values, no repeating groups. 2NF: no partial dependency on composite key. 3NF: no transitive dependencies. Each step removes redundancy.' },
+    { id:11, d:day(-6),  s:'arch1', topic:'Logic Gates and Boolean Algebra',          notes:'AND: both inputs true. OR: at least one true. NOT: inverts. XOR: different inputs. De Morgan\'s law: NOT(A AND B) = NOT A OR NOT B.' },
+    { id:12, d:day(-7),  s:'prog2', topic:'Big-O Complexity Analysis',                notes:'O(1) constant, O(log n) binary search, O(n) linear scan, O(n²) nested loops. Always analyse worst case. Space complexity counts memory used.' }
   ],
 
   tests: [
-    { id:1, s:'math', t:'Algebra and Functions Test',  d:day(6),  type:'Test',      scope:'Ch 2–4: quadratics, parabolas, hyperbola' },
-    { id:2, s:'phys', t:'Forces and Motion Quiz',      d:day(9),  type:'Quiz',      scope:"Newton's laws, friction, free-body diagrams" },
-    { id:3, s:'life', t:'Cell Biology Assessment',     d:day(12), type:'Test',      scope:'Mitosis, meiosis, cell cycle, DNA replication' },
-    { id:4, s:'eng',  t:'Poetry In-Class Essay',       d:day(16), type:'Essay',     scope:'Set poems: analysis of one unseen poem (45 min)' },
-    { id:5, s:'geo',  t:'Map Work Practical',          d:day(20), type:'Practical', scope:'Contour lines, cross-sections, gradient calculation' }
+    { id:1, s:'prog1', t:'Programming Fundamentals Test',       d:day(6),  type:'Test',       scope:'Functions, recursion, lists, control flow' },
+    { id:2, s:'arch1', t:'Number Systems Quiz',                 d:day(9),  type:'Quiz',       scope:'Binary, octal, hex conversions and logic gates' },
+    { id:3, s:'dbms1', t:'SQL and Normalisation Assessment',    d:day(12), type:'Test',       scope:'SQL queries, JOINs, 1NF–3NF normalisation' },
+    { id:4, s:'prog2', t:'Data Structures Test',                d:day(16), type:'Test',       scope:'Linked lists, stacks, queues, complexity analysis' },
+    { id:5, s:'ai2',   t:'Search Algorithms Practical',         d:day(20), type:'Practical',  scope:'BFS, DFS implementation and graph traversal' }
   ],
 
   ann: [
-    { id:1, s:'math', t:'Bring your scientific calculator to every class this week. No phone calculators allowed during the test.',      d:day(-1) },
-    { id:2, s:'phys', t:'Lab reports are due at the start of lesson one on Thursday. Late submissions lose 10% per day.',               d:day(-2) },
-    { id:3, s:'eng',  t:'The poetry anthology is now available in the library. You may borrow one copy per student.',                   d:day(-3) },
-    { id:4, s:'geo',  t:'Map work corrections are open until Friday. See me before school if you need extra help.',                    d:day(-4) },
-    { id:5, s:'life', t:'Practical session on Thursday. Please wear closed-toe shoes — it is a safety requirement in the laboratory.', d:day(-1) },
-    { id:6, s:'math', t:'Test study guide has been uploaded to the class materials. Focus on the worked examples on pages 12–15.',     d:day(0)  }
+    { id:1, s:'prog1', t:'Bring your laptop to every lab session. The practical for functions is on Thursday.',                            d:day(-1) },
+    { id:2, s:'arch1', t:'Number systems assignment is due at the start of class. No email submissions — submit on the portal only.',      d:day(-2) },
+    { id:3, s:'dbms1', t:'The SQL assignment database schema has been uploaded to the LMS. Download it before Thursday.',                  d:day(-3) },
+    { id:4, s:'web2',  t:'Portfolio submissions open on the portal from Monday. Use the peer review rubric to self-assess before submitting.', d:day(-4) },
+    { id:5, s:'ai2',   t:'Practical session on Thursday. Bring your laptop with Python and networkx installed.',                           d:day(-1) },
+    { id:6, s:'prog2', t:'Test study guide has been uploaded. Focus on the complexity analysis questions and linked list operations.',      d:day(0)  }
   ],
 
   notifs: [
-    { id:1, k:'Assignment',   t:"Newton's Laws Lab Report is overdue. Submit as soon as possible to avoid further penalty.",  d:day(0)  },
-    { id:2, k:'Assignment',   t:'Quadratic Equations Worksheet is due in 2 days. You have marked it as in progress.',          d:day(0)  },
-    { id:3, k:'New Material', t:'Ms. Khumalo uploaded: Mitosis and Meiosis Illustrated Notes.',                               d:day(-1) },
-    { id:4, k:'Announcement', t:'Mr. Dlamini: bring your scientific calculator to every class this week.',                    d:day(-1) },
-    { id:5, k:'Assessment',   t:'Algebra and Functions Test in 6 days. The study guide is in your Learning Materials.',       d:day(-1) },
-    { id:6, k:'New Material', t:'Cell Cycle Animation video has been uploaded by Ms. Khumalo.',                               d:day(0)  },
-    { id:7, k:'Announcement', t:'Mrs. Naidoo: poetry anthology available in the library. Borrow your copy.',                 d:day(-2) },
-    { id:8, k:'Assessment',   t:"Forces and Motion Quiz in 9 days. Review Newton's laws and free-body diagrams.",            d:day(-2) }
+    { id:1, k:'Assignment',   t:'Number Systems Conversion Sheet is overdue. Submit as soon as possible.',                                 d:day(0)  },
+    { id:2, k:'Assignment',   t:'Python Functions Exercise is due in 3 days. You have marked it as in progress.',                          d:day(0)  },
+    { id:3, k:'New Material', t:'Mr. Dlamini uploaded: Python Basics — Variables and Data Types.',                                         d:day(-1) },
+    { id:4, k:'Announcement', t:'Mr. Dlamini: bring your laptop to every lab session this week.',                                          d:day(-1) },
+    { id:5, k:'Assessment',   t:'Programming Fundamentals Test in 6 days. The study guide is in your Learning Materials.',                 d:day(-1) },
+    { id:6, k:'New Material', t:'Big-O Complexity Analysis Tutorial video uploaded by Dr. Naidoo.',                                        d:day(0)  },
+    { id:7, k:'Announcement', t:'Ms. Khumalo: SQL assignment schema is now on the LMS. Download before Thursday.',                        d:day(-2) },
+    { id:8, k:'Assessment',   t:'Number Systems Quiz in 9 days. Review binary, hex conversions and logic gates.',                         d:day(-2) }
   ]
 };
 
 // ── Persistent state (localStorage) ─────────────────────────
+// Version bump — clears stale school-subject data from previous builds
+const DATA_VERSION = 2;
+if (parseInt(localStorage.getItem('edora-v') || '0') < DATA_VERSION) {
+  localStorage.removeItem('edora');
+  localStorage.setItem('edora-v', String(DATA_VERSION));
+}
+
 let S = JSON.parse(localStorage.getItem('edora') || 'null') || {
   auth: 0,
   user: null,
   as:   {},      // assignment statuses override
   plan: [        // study planner sessions
-    { id:101, s:'math', date:day(1), time:'16:00', done:0 },
-    { id:102, s:'phys', date:day(1), time:'17:30', done:0 },
-    { id:103, s:'eng',  date:day(2), time:'15:00', done:0 },
-    { id:104, s:'life', date:day(3), time:'16:30', done:0 }
+    { id:101, s:'prog1', date:day(1), time:'16:00', done:0 },
+    { id:102, s:'arch1', date:day(1), time:'17:30', done:0 },
+    { id:103, s:'dbms1', date:day(2), time:'15:00', done:0 },
+    { id:104, s:'prog2', date:day(3), time:'16:30', done:0 }
   ],
   nt:   {},      // read notification ids
   cu:   {},      // catch-up plan checked items
