@@ -441,8 +441,10 @@ small { font-size: 12px; color: var(--text-secondary); }
 
 /* ── Hero banner ─────────────────────────────────────────── */
 .hero {
-  background: linear-gradient(135deg, #FFFBEB 0%, #FFF3C0 100%);
-  border: 1px solid var(--primary-muted);
+  background-image: url('../assets/images/dashboard-hero-banner.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 28px 32px;
   display: flex;
@@ -454,29 +456,31 @@ small { font-size: 12px; color: var(--text-secondary); }
   overflow: hidden;
 }
 
-.hero::before {
+/* Dark scrim over the image so text stays readable */
+.hero::after {
   content: '';
   position: absolute;
-  right: -40px;
-  top: -40px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255,216,77,.35) 0%, transparent 70%);
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.35) 100%);
+  z-index: 0;
   pointer-events: none;
 }
+
+/* All content sits above the scrim */
+.hero > * { position: relative; z-index: 1; }
 
 .hero-eyebrow {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .07em;
   text-transform: uppercase;
-  color: var(--warning);
+  color: #FFD84D;
   margin-bottom: 6px;
 }
 
-.hero h1 { font-size: 26px; color: var(--text-primary); }
-.hero-sub { color: var(--text-secondary); margin-top: 6px; font-size: 13.5px; }
-.hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.7); border: 1px solid rgba(255,216,77,.5); border-radius: 100px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: var(--text-primary); margin-top: 12px; }
+.hero h1 { font-size: 26px; color: #fff; }
+.hero-sub { color: rgba(255,255,255,0.8); margin-top: 6px; font-size: 13.5px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.18); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.25); border-radius: 100px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; color: #fff; margin-top: 12px; }
 
 /* ── Buttons ─────────────────────────────────────────────── */
 .btn {
@@ -1126,12 +1130,11 @@ textarea { resize: vertical; min-height: 90px; }
 
 /* Hero banner */
 [data-theme="dark"] .hero {
-  background: linear-gradient(135deg, #1A1400 0%, #261D00 100%);
-  border-color: #332900;
+  border-color: var(--border);
 }
 
-[data-theme="dark"] .hero::before {
-  background: radial-gradient(circle, rgba(255,216,77,.12) 0%, transparent 70%);
+[data-theme="dark"] .hero::after {
+  background: linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 100%);
 }
 
 /* Topbar backdrop */

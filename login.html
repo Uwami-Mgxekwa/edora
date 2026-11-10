@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EDORA — Sign In</title>
   <!-- Favicon + iOS/PWA home screen icon -->
-  <link rel="icon" type="image/png" href="logo light mode.png">
-  <link rel="apple-touch-icon" href="logo light mode.png">
+  <link rel="icon" type="image/png" href="assets/images/logo light mode.png">
+  <link rel="apple-touch-icon" href="assets/images/logo light mode.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="EDORA">
   <meta name="theme-color" content="#FFD84D">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <!-- Apply saved theme immediately to avoid flash of wrong theme -->
   <script>
     (function() {
@@ -378,8 +378,8 @@
 
 <!-- Full-screen background video (raw, no overlay) -->
 <video class="bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true"
-  poster="high-level-description-a-minimalist-two-_UK03dTb4WSORe6TTHpRRGw_vU1hww_GQGmF16np1_SX1g_cover.jpg">
-  <source src="background.mp4" type="video/mp4">
+  poster="assets/posters/high-level-description-a-minimalist-two-_UK03dTb4WSORe6TTHpRRGw_vU1hww_GQGmF16np1_SX1g_cover.jpg">
+  <source src="assets/video/background.mp4" type="video/mp4">
 </video>
 
 <!-- Theme toggle (glass, fixed top-right) -->
@@ -405,8 +405,8 @@
         <!-- ── FRONT FACE: Sign in ── -->
         <div class="glass-card face face-front">
           <div class="glass-logo-row">
-            <img class="glass-logo light-logo" src="logo light mode.png" alt="EDORA">
-            <img class="glass-logo dark-logo"  src="logo dark mode.png"  alt="EDORA">
+            <img class="glass-logo light-logo" src="assets/images/logo light mode.png" alt="EDORA">
+            <img class="glass-logo dark-logo"  src="assets/images/logo dark mode.png"  alt="EDORA">
           </div>
 
           <div class="glass-head">
@@ -438,7 +438,7 @@
           </button>
 
           <div class="powered-by">
-            <img src="uwami-logo.png" alt="Uwami Mgxekwa logo">
+            <img src="assets/images/uwami-logo.png" alt="Uwami Mgxekwa logo">
             powered by <a href="https://uwamimgxekwa.com" target="_blank" rel="noopener noreferrer">uwami mgxekwa</a>
           </div>
         </div>
@@ -446,8 +446,8 @@
         <!-- ── BACK FACE: Create account ── -->
         <div class="glass-card face face-back">
           <div class="glass-logo-row">
-            <img class="glass-logo light-logo" src="logo light mode.png" alt="EDORA">
-            <img class="glass-logo dark-logo"  src="logo dark mode.png"  alt="EDORA">
+            <img class="glass-logo light-logo" src="assets/images/logo light mode.png" alt="EDORA">
+            <img class="glass-logo dark-logo"  src="assets/images/logo dark mode.png"  alt="EDORA">
           </div>
 
           <div class="glass-head">
@@ -502,7 +502,7 @@
           </button>
 
           <div class="powered-by">
-            <img src="uwami-logo.png" alt="Uwami Mgxekwa logo">
+            <img src="assets/images/uwami-logo.png" alt="Uwami Mgxekwa logo">
             powered by <a href="https://uwamimgxekwa.com" target="_blank" rel="noopener noreferrer">uwami mgxekwa</a>
           </div>
         </div>
@@ -512,7 +512,7 @@
   </div>
 </div>
 
-<script src="mock-data.js"></script>
+<script src="js/mock-data.js"></script>
 <script>
   // ── Theme toggle ──────────────────────────────────────────────
   function toggleTheme() {
