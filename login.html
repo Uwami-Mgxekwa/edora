@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDORA — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Apply saved theme immediately to avoid flash -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('edora-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <style>
+    /* Auth-specific overrides */
+    body { background: var(--background); }
+
+    .auth-page { min-height: 100vh; display: flex; }
+
+    /* ── Left visual panel ── */
+    .auth-visual {
+      flex: 1;
+      background: linear-gradient(145deg, #FFF8E1 0%, #FFF0A0 55%, #FFDD55 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-visual::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,255,255,.55) 0%, transparent 70%);
+      top: -120px; right: -120px;
+      pointer-events: none;
+    }
+
+    .auth-visual::after {
+      content: '';
+      position: absolute;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(255,180,0,.25) 0%, transparent 70%);
+      bottom: -80px; left: -60px;
+      pointer-events: none;
+    }
+
+    .auth-visual-content {
+      position: relative;
+      z-index: 1;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .auth-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .auth-logo-img {
+      width: 160px;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    [data-theme="dark"] .auth-logo-img {
+      mix-blend-mode: luminosity;
+      opacity: .92;
+      filter: brightness(1.1);
+    }
+
+    .auth-headline {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .auth-headline span {
+      position: relative;
+      display: inline-block;
+    }
+
+    .auth-headline span::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 0; right: 0;
+      height: 6px;
+      background: rgba(255,180,0,.4);
+      border-radius: 100px;
+      z-index: -1;
+    }
+
+    .auth-desc {
+      font-size: 15px;
+      color: rgba(26,26,26,.6);
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    .auth-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .auth-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .auth-feature-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+    }
+
+    .tagline-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(26,26,26,.7);
+      margin-bottom: 20px;
+    }
+
+    /* ── Right form panel ── */
+    .auth-form-side {
+      width: 480px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 44px;
+      overflow-y: auto;
+      background: var(--background);
+    }
+
+    .auth-form-box { width: 100%; max-width: 380px; }
+
+    .form-header { margin-bottom: 28px; }
+    .form-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -.03em; color: var(--text-primary); margin-bottom: 5px; }
+    .form-header p  { font-size: 13.5px; color: var(--text-secondary); }
+
+    .tab-switcher {
+      display: flex;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 26px;
+      gap: 2px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border: none;
+      background: none;
+      border-radius: 7px;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .tab-btn.active {
+      background: var(--background);
+      color: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+    }
+
+    .form-panel { display: none; }
+    .form-panel.active { display: block; animation: fadeIn .2s ease; }
+
+    .input-group { margin-bottom: 14px; }
+    .input-group label { margin-bottom: 5px; font-size: 12.5px; font-weight: 600; color: var(--text-secondary); display: block; }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      padding-left: 38px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      pointer-events: none;
+      opacity: .45;
+    }
+
+    .form-submit { width: 100%; margin-top: 6px; }
+
+    .err-msg { color: var(--danger); font-size: 12.5px; min-height: 18px; margin-top: 6px; display: block; }
+
+    .form-footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.6;
+    }
+
+    .demo-box {
+      background: var(--primary-light);
+      border: 1px solid var(--primary-muted);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .demo-box strong { color: var(--text-primary); font-weight: 600; }
+    .demo-box .demo-creds { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .demo-creds code { background: rgba(255,180,0,.18); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--text-primary); }
+
+    @media (max-width: 860px) {
+      .auth-visual { display: none; }
+      .auth-form-side { width: 100%; padding: 32px 24px; }
+      .auth-form-box { max-width: 400px; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- Theme toggle (top-right, fixed) -->
+  <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode"
+    style="position:fixed;top:16px;right:16px;z-index:100">
+    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
+
+  <!-- ── Left visual ── -->
+  <div class="auth-visual">
+    <div class="auth-visual-content">
+
+      <div class="auth-brand">
+        <img src="logo.jpg" alt="EDORA" class="auth-logo-img">
+      </div>
+
+      <div class="tagline-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Your Learning. Your Pace. Your Future.
+      </div>
+
+      <h2 class="auth-headline">
+        Never fall behind<br>in school <span>again</span>.
+      </h2>
+
+      <p class="auth-desc">
+        EDORA keeps every assignment, lesson and deadline in one place — 
+        so you stay on track, even when life gets in the way.
+      </p>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <span class="auth-feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+          </span>
+          Manage assignments and track deadlines
+        </div>
+        <div class="auth-feature">
+          <span class="auth-feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          Catch up on everything you missed
+        </div>
+        <div class="auth-feature">
+          <span class="auth-feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.88 5.76a1 1 0 0 0 .95.69h6.07l-4.91 3.57a1 1 0 0 0-.36 1.12L17.5 20l-4.91-3.57a1 1 0 0 0-1.18 0L6.5 20l1.88-5.76a1 1 0 0 0-.36-1.12L3.1 9.45h6.07a1 1 0 0 0 .95-.69L12 3z"/></svg>
+          </span>
+          Get instant help from EDORA AI
+        </div>
+        <div class="auth-feature">
+          <span class="auth-feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </span>
+          Track your academic progress
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Right form ── -->
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+
+      <div class="form-header">
+        <h2 id="form-heading">Welcome back</h2>
+        <p id="form-subheading">Sign in to continue to your EDORA dashboard.</p>
+      </div>
+
+      <!-- Tab switcher -->
+      <div class="tab-switcher">
+        <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">Sign in</button>
+        <button class="tab-btn" data-tab="register" onclick="switchTab('register')">Create account</button>
+      </div>
+
+      <!-- Demo credentials hint -->
+      <div class="demo-box">
+        <strong>Demo account</strong>
+        <div class="demo-creds">
+          <span>Email: <code>demo@edora.app</code></span>
+          <span>Password: <code>demo1234</code></span>
+        </div>
+      </div>
+
+      <!-- ── Login form ── -->
+      <div class="form-panel active" id="panel-login">
+        <form id="login-form" novalidate>
+          <div class="input-group">
+            <label for="login-email">Email address</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+              <input type="email" id="login-email" name="email" placeholder="you@school.edu" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              <input type="password" id="login-password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            </div>
+          </div>
+          <span class="err-msg" id="login-err"></span>
+          <button type="submit" class="btn lg form-submit">Sign in</button>
+        </form>
+      </div>
+
+      <!-- ── Register form ── -->
+      <div class="form-panel" id="panel-register">
+        <form id="register-form" novalidate>
+          <div class="input-group">
+            <label for="reg-name">Full name</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <input type="text" id="reg-name" name="name" placeholder="Thabo Mokoena" autocomplete="name" required>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="reg-email">Email address</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+              <input type="email" id="reg-email" name="email" placeholder="you@school.edu" autocomplete="email" required>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="input-group" style="margin-bottom:0">
+              <label for="reg-school">School</label>
+              <input type="text" id="reg-school" name="school" placeholder="School name" required>
+            </div>
+            <div class="input-group" style="margin-bottom:0">
+              <label for="reg-grade">Grade</label>
+              <select id="reg-grade" name="grade" required>
+                <option value="">Select</option>
+                <option>Grade 8</option>
+                <option>Grade 9</option>
+                <option selected>Grade 10</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group" style="margin-top:14px;">
+            <label for="reg-password">Password</label>
+            <div class="input-wrap">
+              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              <input type="password" id="reg-password" name="password" placeholder="At least 6 characters" autocomplete="new-password" required>
+            </div>
+          </div>
+          <span class="err-msg" id="reg-err"></span>
+          <button type="submit" class="btn lg form-submit">Create account</button>
+        </form>
+      </div>
+
+      <div class="form-footer">
+        This is a demonstration prototype.<br>
+        No real data is stored. All information lives in your browser.
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="mock-data.js"></script>
+<script>
+  // Theme toggle
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.classList.add('theme-switching');
+    const next = (html.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('edora-theme', next);
+    setTimeout(() => html.classList.remove('theme-switching'), 300);
+  }
+
+  // Redirect if already logged in
+  if (S.auth && S.user) location.href = 'index.html';
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+    const heading = document.getElementById('form-heading');
+    const sub = document.getElementById('form-subheading');
+    if (tab === 'login') {
+      heading.textContent = 'Welcome back';
+      sub.textContent = 'Sign in to continue to your EDORA dashboard.';
+    } else {
+      heading.textContent = 'Create your account';
+      sub.textContent = 'Join EDORA and take control of your education.';
+    }
+  }
+
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = this.email.value.trim();
+    const pass  = this.password.value;
+    const err   = document.getElementById('login-err');
+    err.textContent = '';
+
+    if (!email) return err.textContent = 'Please enter your email address.';
+    if (!pass)  return err.textContent = 'Please enter your password.';
+
+    // Demo account
+    if (email === 'demo@edora.app' && pass === 'demo1234') {
+      S.auth = 1;
+      if (!S.user) S.user = { name: 'Lethabo Sithole', email: 'demo@edora.app', school: 'Greenfield High School', grade: 'Grade 10', pic: '' };
+      save();
+      return location.href = 'index.html';
+    }
+
+    // Registered accounts
+    const accounts = JSON.parse(localStorage.getItem('edora-accounts') || '[]');
+    const found = accounts.find(a => a.email.toLowerCase() === email.toLowerCase() && a.password === pass);
+    if (found) {
+      S.auth = 1;
+      S.user = { name: found.name, email: found.email, school: found.school, grade: found.grade, pic: '' };
+      save();
+      return location.href = 'index.html';
+    }
+
+    err.textContent = 'Incorrect email or password. Try the demo account above.';
+  });
+
+  document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name   = this.name.value.trim();
+    const email  = this.email.value.trim();
+    const school = this.school.value.trim();
+    const grade  = this.grade.value;
+    const pass   = this.password.value;
+    const err    = document.getElementById('reg-err');
+    err.textContent = '';
+
+    if (!name)         return err.textContent = 'Please enter your full name.';
+    if (!email)        return err.textContent = 'Please enter your email address.';
+    if (!school)       return err.textContent = 'Please enter your school name.';
+    if (!grade)        return err.textContent = 'Please select your grade.';
+    if (pass.length < 6) return err.textContent = 'Password must be at least 6 characters.';
+
+    const accounts = JSON.parse(localStorage.getItem('edora-accounts') || '[]');
+    if (accounts.find(a => a.email.toLowerCase() === email.toLowerCase())) {
+      return err.textContent = 'An account with this email already exists.';
+    }
+
+    accounts.push({ name, email, school, grade, password: pass });
+    localStorage.setItem('edora-accounts', JSON.stringify(accounts));
+
+    S.auth = 1;
+    S.user = { name, email, school, grade, pic: '' };
+    save();
+    location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+Give Claude the prompt below. I recommend using Claude Code if you have it, so it can create the actual project files rather than just showing you code in a chat.
+
+This prompt instructs Claude to build EDORA as a working frontend using only HTML, CSS and vanilla JavaScript.
+
+Writing
+
+# BUILD EDORA – COMPLETE FRONTEND DEVELOPMENT
+
+Act as a senior frontend developer, UI/UX designer and software architect.
+
+I want you to BUILD an actual working frontend for my educational technology platform called **EDORA**.
+
+Do not simply explain how to build it. Do not just provide design suggestions or code snippets. I want you to create the actual HTML, CSS and JavaScript files for the application.
+
+## 1\. Project description
+
+EDORA is an educational management and academic support platform designed to help students manage their schoolwork and remain academically connected, even when they cannot physically attend school.
+
+The platform will help students:
+
+- Manage assignments and homework.
+- Access classroom notes and learning materials.
+- Keep track of deadlines.
+- View missed lessons and classroom activities.
+- Catch up on schoolwork after being absent.
+- Receive AI-powered academic assistance (simulated for now).
+- Organise study schedules.
+- Monitor academic progress.
+- Stay connected with teachers.
+
+The central idea behind EDORA is:
+
+**No student should be left behind simply because they cannot attend school.**
+
+Tagline: "Your Learning. Your Pace. Your Future."
+
+## 2\. Technology stack
+
+Use ONLY:
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+Do not use:
+
+- React
+- Angular
+- Vue
+- Next.js
+- Tailwind CSS
+- Bootstrap
+- Backend frameworks
+- Database systems
+
+You may use Lucide icons through an icon library CDN if needed, and Google Fonts for typography.
+
+All functionality must be implemented using vanilla JavaScript.
+
+This is a frontend-only prototype. Use mock data and localStorage to simulate application functionality.
+
+## 3\. Visual design
+
+Create a beautiful, minimalist, modern educational SaaS interface.
+
+The design must be:
+
+- Clean.
+- Professional.
+- Minimalist.
+- Intuitive.
+- Responsive.
+- Visually consistent.
+
+### Brand colours
+
+Use a white and yellow theme.
+
+CSS colour variables:
+
+css
+
+```css
+:root {
+  --primary: #FFD84D;
+  --primary-light: #FFF8DC;
+  --background: #FFFFFF;
+  --surface: #F7F7F5;
+  --text-primary: #252525;
+  --text-secondary: #777777;
+  --border: #EEEEEA;
+  --success: #3A9D70;
+  --danger: #E45B5B;
+}
+```
+
+White must dominate the interface.
+
+Yellow should be used for primary buttons, active navigation, highlights and important indicators.
+
+Use dark charcoal for typography.
+
+Use Inter or a similar modern sans-serif font.
+
+Avoid excessive shadows, gradients, colours and decorative elements.
+
+The interface should feel like a premium modern SaaS product.
+
+## 4\. Application structure
+
+Build a complete student-facing application with the following pages:
+
+1. Login
+2. Registration
+3. Dashboard
+4. My Subjects
+5. Assignments
+6. Learning Materials
+7. I Missed School
+8. EDORA AI
+9. Study Planner
+10. Academic Progress
+11. Notifications
+12. Profile and Settings
+
+Create a consistent sidebar navigation for desktop and a responsive navigation system for mobile.
+
+Use a shared application layout across all authenticated pages.
+
+## 5\. Dashboard
+
+Build a polished student dashboard containing:
+
+- Personalised welcome message.
+- Student profile.
+- Current date.
+- Total assignments.
+- Pending assignments.
+- Completed assignments.
+- Upcoming assessments.
+- Recent classroom activities.
+- Recently uploaded learning materials.
+- Upcoming deadlines.
+- Academic progress.
+- Quick-access shortcuts.
+
+The dashboard must immediately communicate what the student needs to do next.
+
+## 6\. Assignments
+
+Create a functional assignment management page.
+
+Include:
+
+- Assignment list.
+- Subject.
+- Description.
+- Due date.
+- Submission status.
+- Priority.
+- Assignment details.
+- Assignment submission interface.
+
+Allow students to filter assignments by subject and status.
+
+Include the statuses:
+
+- Not started.
+- In progress.
+- Submitted.
+- Overdue.
+- Graded.
+
+Simulate submission using JavaScript.
+
+## 7\. My Subjects
+
+Create subject cards for subjects such as Mathematics, English, Physical Sciences, Life Sciences and Geography.
+
+Each subject should have a dedicated view containing:
+
+- Subject overview.
+- Teacher information.
+- Learning materials.
+- Classwork.
+- Homework.
+- Assignments.
+- Assessments.
+- Announcements.
+
+## 8\. Learning Materials
+
+Create a resource library where students can access:
+
+- PDF notes.
+- Lesson presentations.
+- Study guides.
+- Reading materials.
+- Videos.
+
+Include search and filtering functionality.
+
+Use realistic mock resources.
+
+## 9\. I Missed School – Signature feature
+
+This is one of the most important features of EDORA.
+
+Create a dedicated absence recovery page.
+
+Students must be able to select the dates they missed school and view:
+
+- Lessons covered during their absence.
+- Class notes.
+- Learning materials.
+- Assignments given.
+- Classwork completed.
+- Upcoming assessments.
+- Outstanding academic activities.
+
+Create a personalised catch-up plan showing what they need to complete.
+
+Make the experience supportive, simple and easy to understand.
+
+## 10\. EDORA AI
+
+Create a modern AI chat interface.
+
+Include:
+
+- Conversation history.
+- Chat window.
+- Message input.
+- Send button.
+- Suggested questions.
+- Clear conversation option.
+
+Simulate AI responses using predefined JavaScript responses.
+
+Do not connect to an actual AI service.
+
+## 11\. Study Planner
+
+Create a weekly study planner.
+
+Allow students to:
+
+- Add study sessions.
+- Select subjects.
+- Set dates and times.
+- Mark sessions as completed.
+- Delete sessions.
+
+Persist changes using localStorage.
+
+## 12\. Academic Progress
+
+Create a progress dashboard showing:
+
+- Assignment completion.
+- Subject progress.
+- Outstanding work.
+- Completed activities.
+- Academic achievements.
+- Areas requiring improvement.
+
+Use clean visual charts.
+
+## 13\. Notifications
+
+Create a functional notification centre.
+
+Include:
+
+- Assignment reminders.
+- New lesson uploads.
+- Teacher announcements.
+- Assessment reminders.
+
+Allow notifications to be marked as read.
+
+## 14\. Authentication and profile
+
+Create login and registration screens with frontend-only simulated authentication.
+
+Create a student profile section where users can edit:
+
+- Name.
+- Email.
+- School.
+- Grade.
+- Profile picture.
+
+This is a demonstration only, not real authentication.
+
+## 15\. Functional requirements
+
+Every visible button, link, dropdown and navigation item must have a working action.
+
+Implement:
+
+- Page navigation.
+- Search.
+- Filters.
+- Modals.
+- Forms.
+- Form validation.
+- Assignment management.
+- Simulated submissions.
+- Study planner interactions.
+- AI chat simulation.
+- Notification management.
+- Profile editing.
+- localStorage persistence.
+
+Do not create decorative buttons that do nothing.
+
+Use realistic mock data throughout the platform.
+
+## 16\. Responsive design
+
+The application must work properly on:
+
+- Desktop.
+- Laptop.
+- Tablet.
+- Mobile phones.
+
+Build mobile-first responsive layouts where practical.
+
+Ensure the sidebar becomes a mobile-friendly navigation menu.
+
+## 17\. Project file structure
+
+Create a well-organised project.
+
+Use a structure similar to:
+
+EDORA/ index.html login.html register.html css/ style.css dashboard.css responsive.css js/ app.js navigation.js mock-data.js assignments.js subjects.js planner.js assistant.js assets/ images/ icons/ README.md
+
+You may improve this structure if necessary.
+
+## 18\. DEVELOPMENT INSTRUCTIONS
+
+Follow these instructions carefully:
+
+1. First, establish the project structure.
+2. Create the global design system.
+3. Build the shared application layout.
+4. Develop the login and registration screens.
+5. Develop the student dashboard.
+6. Build all remaining modules.
+7. Implement JavaScript interactions.
+8. Add realistic mock data.
+9. Implement localStorage persistence.
+10. Test navigation and functionality.
+11. Test responsive layouts.
+12. Fix errors before considering the project complete.
+
+Do not leave pages unfinished.
+
+Do not use placeholder text everywhere.
+
+Do not create empty sections.
+
+Do not stop after creating the dashboard.
+
+Build the complete student-facing prototype.
+
+If the task is too large to complete in one pass, work in stages, but continue creating the actual project files until all modules are implemented.
+
+## 19\. Final deliverable
+
+I expect:
+
+- A complete working frontend.
+- Actual HTML files.
+- Actual CSS files.
+- Actual JavaScript files.
+- Functional navigation.
+- Interactive components.
+- Realistic mock data.
+- Responsive layouts.
+- Consistent branding.
+- A README explaining how to run the project.
+
+The application should be runnable locally by opening its HTML entry point or using a simple local development server.
+
+Most importantly, make EDORA look like a real, professionally developed educational technology product that could be demonstrated to schools and potential investors.
+
+**Start building the actual project files now. Do not just give me instructions on how to build them.**
