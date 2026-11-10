@@ -146,12 +146,14 @@ small { font-size: 12px; color: var(--text-secondary); }
 .sb-top {
   padding: 24px 20px 8px;
   flex-shrink: 0;
+  text-align: center;
 }
 
 /* ── Logo image (sidebar) ────────────────────────────────── */
 .logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 4px;
 }
 
@@ -159,17 +161,16 @@ small { font-size: 12px; color: var(--text-secondary); }
   width: 110px;
   height: auto;
   display: block;
-  /* logo.jpg has a white bg — crop tight and invert in dark mode */
   border-radius: 6px;
   object-fit: contain;
+  margin: 0 auto;
 }
 
-/* In dark mode the white JPG background would show — blend it out */
-[data-theme="dark"] .logo-img {
-  mix-blend-mode: luminosity;
-  opacity: .92;
-  filter: brightness(1.1);
-}
+/* Theme-aware sidebar logo (swaps with dark / light mode) */
+.logo-img.light-logo { display: block; }
+.logo-img.dark-logo  { display: none; }
+[data-theme="dark"] .logo-img.light-logo { display: none; }
+[data-theme="dark"] .logo-img.dark-logo  { display: block; }
 
 .tagline {
   font-size: 11px;
