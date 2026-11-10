@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- Apply saved theme immediately to avoid flash -->
+  <!-- Apply saved theme immediately to avoid flash of wrong theme -->
   <script>
     (function() {
       var t = localStorage.getItem('edora-theme') || 'light';
@@ -15,430 +15,535 @@
     })();
   </script>
   <style>
-    /* Auth-specific overrides */
-    body { background: var(--background); }
+    /* ============================================================
+       EDORA — Glassmorphism Auth
+       Full-screen video background + centered frosted glass card
+       with a 3D flip between Sign In and Create Account.
+       ============================================================ */
 
-    .auth-page { min-height: 100vh; display: flex; }
+    /* The video is the page background, so the app's opaque
+       --background must not cover it. Use a neutral dark base so
+       any letterboxing stays dark in both themes. */
+    body {
+      background: #0c0c0c;
+      overflow-x: hidden;   /* parallax tilt must not cause a scrollbar */
+      overflow-y: auto;     /* allow scroll if the card is taller than the viewport (short screens) */
+    }
 
-    /* ── Left visual panel ── */
-    .auth-visual {
-      flex: 1;
-      background: linear-gradient(145deg, #FFF8E1 0%, #FFF0A0 55%, #FFDD55 100%);
+    /* ── Background video ─────────────────────────────────────── */
+    .bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+      animation: kenburns 26s ease-in-out infinite alternate;
+    }
+
+    @keyframes kenburns {
+      from { transform: scale(1) translateY(0); }
+      to   { transform: scale(1.12) translateY(-1.5%); }
+    }
+
+    /* ── Theme toggle (glass, floats over the video) ──────────── */
+    .auth-theme-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      width: 40px;
+      height: 40px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px;
-      position: relative;
-      overflow: hidden;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.14);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      backdrop-filter: blur(14px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
-
-    .auth-visual::before {
-      content: '';
-      position: absolute;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(255,255,255,.55) 0%, transparent 70%);
-      top: -120px; right: -120px;
-      pointer-events: none;
+    .auth-theme-btn:hover {
+      background: rgba(255, 255, 255, 0.24);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
     }
+    .auth-theme-btn .icon-sun  { display: none; }
+    .auth-theme-btn .icon-moon { display: block; }
+    [data-theme="dark"] .auth-theme-btn .icon-sun  { display: block; }
+    [data-theme="dark"] .auth-theme-btn .icon-moon { display: none; }
 
-    .auth-visual::after {
-      content: '';
-      position: absolute;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(255,180,0,.25) 0%, transparent 70%);
-      bottom: -80px; left: -60px;
-      pointer-events: none;
-    }
-
-    .auth-visual-content {
+    /* ── Stage: centers the card and sets 3D perspective ──────── */
+    .glass-stage {
       position: relative;
       z-index: 1;
-      max-width: 400px;
-      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      perspective: 1500px;
     }
 
-    .auth-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 48px;
+    /* ── Entrance wrapper (one-shot spring) ──────────────────── */
+    .glass-anim {
+      width: 380px;
+      max-width: calc(100vw - 48px);
+      perspective: 1500px;
+      opacity: 0;
+      animation: cardSpring 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+    }
+    @keyframes cardSpring {
+      0%   { opacity: 0; transform: translateY(34px) scale(0.94); }
+      62%  { opacity: 1; transform: translateY(-6px) scale(1.015); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .auth-logo-img {
-      width: 160px;
-      height: auto;
-      display: block;
-      border-radius: 8px;
-      object-fit: contain;
+    /* ── Parallax tilt wrapper (mouse-driven, JS sets transform) */
+    .glass-tilt {
+      perspective: 1500px;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
     }
 
-    [data-theme="dark"] .auth-logo-img {
-      mix-blend-mode: luminosity;
-      opacity: .92;
-      filter: brightness(1.1);
-    }
-
-    .auth-headline {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -.04em;
-      color: var(--text-primary);
-      line-height: 1.2;
-      margin-bottom: 14px;
-    }
-
-    .auth-headline span {
+    /* ── Flipper: holds the two faces, height animates to the
+          active form so the taller sign-up form flips in smoothly. */
+    .flipper {
       position: relative;
-      display: inline-block;
+      width: 100%;
+      height: 560px;            /* default; corrected by JS on load */
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .flipper.flipped { transform: rotateY(180deg); }
+
+    /* ── Glass card faces ────────────────────────────────────── */
+    .glass-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-style: preserve-3d;
+      padding: 32px 30px 26px;
+      border-radius: 28px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.35),
+        0 8px 22px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.06);
     }
 
-    .auth-headline span::after {
+    /* Light theme glass: frosted white */
+    :root .glass-card {
+      background: rgba(255, 255, 255, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      backdrop-filter: blur(22px) saturate(180%);
+    }
+    /* Dark theme glass: frosted graphite */
+    [data-theme="dark"] .glass-card {
+      background: rgba(20, 20, 20, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        0 8px 22px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.18),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+    }
+
+    .face-front { transform: rotateY(0deg); }
+    .face-back  { transform: rotateY(180deg); }
+
+    /* ── Glass shimmer sweep (decorative ::after) ────────────── */
+    .glass-card::after {
       content: '';
       position: absolute;
-      bottom: 2px; left: 0; right: 0;
-      height: 6px;
-      background: rgba(255,180,0,.4);
-      border-radius: 100px;
-      z-index: -1;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        115deg,
+        transparent 28%,
+        rgba(255, 255, 255, 0.10) 44%,
+        rgba(255, 255, 255, 0.22) 50%,
+        rgba(255, 255, 255, 0.10) 56%,
+        transparent 72%
+      );
+      background-size: 300% 300%;
+      background-position: -50% -50%;
+      animation: shimmer 7s ease-in-out infinite;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: -50% -50%; }
+      50%      { background-position: 150% 150%; }
     }
 
-    .auth-desc {
-      font-size: 15px;
-      color: rgba(26,26,26,.6);
-      line-height: 1.65;
-      margin-bottom: 36px;
-    }
-
-    .auth-features {
+    /* ── Logo (theme-aware) ───────────────────────────────────── */
+    .glass-logo-row {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      justify-content: center;
+      margin-bottom: 14px;
     }
+    .glass-logo {
+      width: 132px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+    }
+    .light-logo { display: block; }
+    .dark-logo  { display: none; }
+    [data-theme="dark"] .light-logo { display: none; }
+    [data-theme="dark"] .dark-logo  { display: block; }
 
-    .auth-feature {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255,255,255,.55);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,.8);
-      border-radius: 12px;
-      padding: 11px 14px;
-      font-size: 13.5px;
-      font-weight: 500;
+    /* ── Headings & text ──────────────────────────────────────── */
+    .glass-head h2 {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
       color: var(--text-primary);
-    }
-
-    .auth-feature-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-      width: 28px;
       text-align: center;
     }
+    .glass-head p {
+      font-size: 13px;
+      color: var(--text-primary);
+      opacity: 0.62;
+      text-align: center;
+      margin-top: 4px;
+      margin-bottom: 18px;
+    }
 
-    .tagline-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,.6);
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: 100px;
-      padding: 6px 14px;
+    /* ── Inputs ───────────────────────────────────────────────── */
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: block;
       font-size: 12px;
       font-weight: 600;
-      color: rgba(26,26,26,.7);
-      margin-bottom: 20px;
-    }
-
-    /* ── Right form panel ── */
-    .auth-form-side {
-      width: 480px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 44px;
-      overflow-y: auto;
-      background: var(--background);
-    }
-
-    .auth-form-box { width: 100%; max-width: 380px; }
-
-    .form-header { margin-bottom: 28px; }
-    .form-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -.03em; color: var(--text-primary); margin-bottom: 5px; }
-    .form-header p  { font-size: 13.5px; color: var(--text-secondary); }
-
-    .tab-switcher {
-      display: flex;
-      background: var(--surface);
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 26px;
-      gap: 2px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 9px 12px;
-      border: none;
-      background: none;
-      border-radius: 7px;
-      font: inherit;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-
-    .tab-btn.active {
-      background: var(--background);
       color: var(--text-primary);
-      box-shadow: 0 1px 4px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      opacity: 0.72;
+      margin: 8px 0 5px;
     }
-
-    .form-panel { display: none; }
-    .form-panel.active { display: block; animation: fadeIn .2s ease; }
-
-    .input-group { margin-bottom: 14px; }
-    .input-group label { margin-bottom: 5px; font-size: 12.5px; font-weight: 600; color: var(--text-secondary); display: block; }
-
-    .input-wrap {
-      position: relative;
-    }
-
-    .input-wrap input {
-      padding-left: 38px;
-    }
-
+    .input-wrap { position: relative; }
     .input-icon {
       position: absolute;
-      left: 12px;
+      left: 13px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 15px;
+      opacity: 0.5;
       pointer-events: none;
-      opacity: .45;
+      color: var(--text-primary);
+      display: flex;
+    }
+    .glass-input {
+      width: 100%;
+      padding: 12px 14px 12px 40px;
+      border-radius: 14px;
+      font: inherit;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    [data-theme="dark"] .glass-input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .glass-input::placeholder { color: var(--text-primary); opacity: 0.45; }
+    .glass-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.26);
+      box-shadow: 0 0 0 4px rgba(255, 216, 77, 0.22),
+                  inset 0 0 0 1px rgba(255, 216, 77, 0.4);
+    }
+    [data-theme="dark"] .glass-input:focus {
+      background: rgba(255, 255, 255, 0.09);
+    }
+    select.glass-input { cursor: pointer; padding-left: 14px; }
+
+    /* ── Submit button ────────────────────────────────────────── */
+    .form-submit {
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 14px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .form-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(255, 200, 0, 0.35);
+    }
+    .form-submit:active { transform: translateY(0); box-shadow: none; }
+
+    /* ── Error message ───────────────────────────────────────── */
+    .err-msg {
+      color: #fff;
+      background: rgba(239, 68, 68, 0.85);
+      border-radius: 10px;
+      padding: 7px 11px;
+      font-size: 12.5px;
+      min-height: 0;
+      margin-top: 8px;
+      display: block;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    .err-msg:empty { display: none; }
+
+    /* ── Demo credentials hint (glass pill) ───────────────────── */
+    .demo-box {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 14px;
+      padding: 11px 14px;
+      margin: 6px 0 16px;
+      font-size: 12px;
+      color: var(--text-primary);
+      opacity: 0.95;
+    }
+    [data-theme="dark"] .demo-box {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .demo-box strong { font-weight: 700; }
+    .demo-creds { margin-top: 5px; display: flex; flex-direction: column; gap: 2px; }
+    .demo-code {
+      background: rgba(255, 180, 0, 0.22);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-primary);
     }
 
-    .form-submit { width: 100%; margin-top: 6px; }
-
-    .err-msg { color: var(--danger); font-size: 12.5px; min-height: 18px; margin-top: 6px; display: block; }
-
-    .form-footer {
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
+    /* ── Flip links (switch between faces) ────────────────────── */
+    .flip-link {
+      display: block;
       text-align: center;
-      font-size: 12px;
-      color: var(--text-tertiary);
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--text-primary);
+      opacity: 0.78;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      transition: opacity 0.18s ease;
+    }
+    .flip-link b {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .flip-link:hover { opacity: 1; }
+
+    /* ── Footer note ──────────────────────────────────────────── */
+    .glass-foot {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-primary);
+      opacity: 0.55;
       line-height: 1.6;
     }
+    [data-theme="dark"] .glass-foot { border-top-color: rgba(255, 255, 255, 0.08); }
 
-    .demo-box {
-      background: var(--primary-light);
-      border: 1px solid var(--primary-muted);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 20px;
-      font-size: 12.5px;
-      color: var(--text-secondary);
+    /* ── Staggered reveal of card contents ────────────────────── */
+    .reveal {
+      opacity: 0;
+      animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .demo-box strong { color: var(--text-primary); font-weight: 600; }
-    .demo-box .demo-creds { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
-    .demo-creds code { background: rgba(255,180,0,.18); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--text-primary); }
-
-    @media (max-width: 860px) {
-      .auth-visual { display: none; }
-      .auth-form-side { width: 100%; padding: 32px 24px; }
-      .auth-form-box { max-width: 400px; }
+    /* ── Reduced motion: calm, static experience ──────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .bg-video { animation: none; }
+      .glass-anim { animation: none; opacity: 1; }
+      .glass-card::after { animation: none; opacity: 0; }
+      .reveal { animation: none; opacity: 1; }
+      .glass-tilt { transition: none; }
+      /* Flip becomes a cross-fade instead of a 3D rotation */
+      body.rm .flipper { transition: opacity 0.25s ease, height 0.4s ease; transform: none !important; }
+      body.rm .glass-card { backface-visibility: visible; }
+      body.rm .face-back { transform: none; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+      body.rm .flipper.flipped .face-front { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+      body.rm .flipper.flipped .face-back { opacity: 1; pointer-events: auto; }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to   { opacity: 1; transform: none; }
+    /* ── Mobile ───────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .glass-card { padding: 26px 22px 22px; border-radius: 24px; }
+      .glass-logo { width: 116px; }
     }
   </style>
 </head>
 <body>
 
-<div class="auth-page">
+<!-- Full-screen background video (raw, no overlay) -->
+<video class="bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true"
+  poster="high-level-description-a-minimalist-two-_UK03dTb4WSORe6TTHpRRGw_vU1hww_GQGmF16np1_SX1g_cover.jpg">
+  <source src="background.mp4" type="video/mp4">
+</video>
 
-  <!-- Theme toggle (top-right, fixed) -->
-  <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode"
-    style="position:fixed;top:16px;right:16px;z-index:100">
-    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"/>
-      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-    </svg>
-  </button>
+<!-- Theme toggle (glass, fixed top-right) -->
+<button class="auth-theme-btn" onclick="toggleTheme()" title="Toggle dark / light mode" aria-label="Toggle dark or light mode">
+  <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+</button>
 
-  <!-- ── Left visual ── -->
-  <div class="auth-visual">
-    <div class="auth-visual-content">
+<!-- Centered glass card over the video -->
+<div class="glass-stage" id="glassStage">
+  <div class="glass-anim">
+    <div class="glass-tilt" id="glassTilt">
+      <div class="flipper" id="flipper">
 
-      <div class="auth-brand">
-        <img src="logo.jpg" alt="EDORA" class="auth-logo-img">
+        <!-- ── FRONT FACE: Sign in ── -->
+        <div class="glass-card face face-front">
+          <div class="glass-logo-row reveal" style="animation-delay:.5s">
+            <img class="glass-logo light-logo" src="logo light mode.png" alt="EDORA">
+            <img class="glass-logo dark-logo"  src="logo dark mode.png"  alt="EDORA">
+          </div>
+
+          <div class="glass-head reveal" style="animation-delay:.58s">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue to your EDORA dashboard.</p>
+          </div>
+
+          <div class="demo-box reveal" style="animation-delay:.66s">
+            <strong>Demo account</strong>
+            <div class="demo-creds">
+              <span>Email: <span class="demo-code">demo@edora.app</span></span>
+              <span>Password: <span class="demo-code">demo1234</span></span>
+            </div>
+          </div>
+
+          <form id="login-form" class="reveal" novalidate style="animation-delay:.74s">
+            <div class="field">
+              <label for="login-email">Email address</label>
+              <div class="input-wrap">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                <input type="email" id="login-email" name="email" class="glass-input" placeholder="you@school.edu" autocomplete="email" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <div class="input-wrap">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input type="password" id="login-password" name="password" class="glass-input" placeholder="Enter your password" autocomplete="current-password" required>
+              </div>
+            </div>
+            <span class="err-msg" id="login-err"></span>
+            <button type="submit" class="btn lg form-submit">Sign in</button>
+          </form>
+
+          <button class="flip-link reveal" onclick="switchTab('register')" style="animation-delay:.88s">
+            New to EDORA? <b>Create an account</b>
+          </button>
+
+          <div class="glass-foot reveal" style="animation-delay:.98s">
+            This is a demonstration prototype.<br>
+            No real data is stored. All information lives in your browser.
+          </div>
+        </div>
+
+        <!-- ── BACK FACE: Create account ── -->
+        <div class="glass-card face face-back">
+          <div class="glass-logo-row reveal" style="animation-delay:.5s">
+            <img class="glass-logo light-logo" src="logo light mode.png" alt="EDORA">
+            <img class="glass-logo dark-logo"  src="logo dark mode.png"  alt="EDORA">
+          </div>
+
+          <div class="glass-head reveal" style="animation-delay:.58s">
+            <h2>Create your account</h2>
+            <p>Join EDORA and take control of your education.</p>
+          </div>
+
+          <form id="register-form" class="reveal" novalidate style="animation-delay:.66s">
+            <div class="field">
+              <label for="reg-name">Full name</label>
+              <div class="input-wrap">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                <input type="text" id="reg-name" name="name" class="glass-input" placeholder="Thabo Mokoena" autocomplete="name" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="reg-email">Email address</label>
+              <div class="input-wrap">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                <input type="email" id="reg-email" name="email" class="glass-input" placeholder="you@school.edu" autocomplete="email" required>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="field" style="margin-bottom:0">
+                <label for="reg-school">School</label>
+                <input type="text" id="reg-school" name="school" class="glass-input" placeholder="School name" required>
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label for="reg-grade">Grade</label>
+                <select id="reg-grade" name="grade" class="glass-input" required>
+                  <option value="">Select</option>
+                  <option>Grade 8</option>
+                  <option>Grade 9</option>
+                  <option selected>Grade 10</option>
+                  <option>Grade 11</option>
+                  <option>Grade 12</option>
+                </select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="reg-password">Password</label>
+              <div class="input-wrap">
+                <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input type="password" id="reg-password" name="password" class="glass-input" placeholder="At least 6 characters" autocomplete="new-password" required>
+              </div>
+            </div>
+            <span class="err-msg" id="reg-err"></span>
+            <button type="submit" class="btn lg form-submit">Create account</button>
+          </form>
+
+          <button class="flip-link reveal" onclick="switchTab('login')" style="animation-delay:.82s">
+            Already have an account? <b>Sign in</b>
+          </button>
+
+          <div class="glass-foot reveal" style="animation-delay:.92s">
+            This is a demonstration prototype.<br>
+            No real data is stored. All information lives in your browser.
+          </div>
+        </div>
+
       </div>
-
-      <div class="tagline-badge">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="opacity:.6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Your Learning. Your Pace. Your Future.
-      </div>
-
-      <h2 class="auth-headline">
-        Never fall behind<br>in school <span>again</span>.
-      </h2>
-
-      <p class="auth-desc">
-        EDORA keeps every assignment, lesson and deadline in one place — 
-        so you stay on track, even when life gets in the way.
-      </p>
-
-      <div class="auth-features">
-        <div class="auth-feature">
-          <span class="auth-feature-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
-          </span>
-          Manage assignments and track deadlines
-        </div>
-        <div class="auth-feature">
-          <span class="auth-feature-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </span>
-          Catch up on everything you missed
-        </div>
-        <div class="auth-feature">
-          <span class="auth-feature-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.88 5.76a1 1 0 0 0 .95.69h6.07l-4.91 3.57a1 1 0 0 0-.36 1.12L17.5 20l-4.91-3.57a1 1 0 0 0-1.18 0L6.5 20l1.88-5.76a1 1 0 0 0-.36-1.12L3.1 9.45h6.07a1 1 0 0 0 .95-.69L12 3z"/></svg>
-          </span>
-          Get instant help from EDORA AI
-        </div>
-        <div class="auth-feature">
-          <span class="auth-feature-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </span>
-          Track your academic progress
-        </div>
-      </div>
-
     </div>
   </div>
-
-  <!-- ── Right form ── -->
-  <div class="auth-form-side">
-    <div class="auth-form-box">
-
-      <div class="form-header">
-        <h2 id="form-heading">Welcome back</h2>
-        <p id="form-subheading">Sign in to continue to your EDORA dashboard.</p>
-      </div>
-
-      <!-- Tab switcher -->
-      <div class="tab-switcher">
-        <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">Sign in</button>
-        <button class="tab-btn" data-tab="register" onclick="switchTab('register')">Create account</button>
-      </div>
-
-      <!-- Demo credentials hint -->
-      <div class="demo-box">
-        <strong>Demo account</strong>
-        <div class="demo-creds">
-          <span>Email: <code>demo@edora.app</code></span>
-          <span>Password: <code>demo1234</code></span>
-        </div>
-      </div>
-
-      <!-- ── Login form ── -->
-      <div class="form-panel active" id="panel-login">
-        <form id="login-form" novalidate>
-          <div class="input-group">
-            <label for="login-email">Email address</label>
-            <div class="input-wrap">
-              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-              <input type="email" id="login-email" name="email" placeholder="you@school.edu" autocomplete="email" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="login-password">Password</label>
-            <div class="input-wrap">
-              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-              <input type="password" id="login-password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
-            </div>
-          </div>
-          <span class="err-msg" id="login-err"></span>
-          <button type="submit" class="btn lg form-submit">Sign in</button>
-        </form>
-      </div>
-
-      <!-- ── Register form ── -->
-      <div class="form-panel" id="panel-register">
-        <form id="register-form" novalidate>
-          <div class="input-group">
-            <label for="reg-name">Full name</label>
-            <div class="input-wrap">
-              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-              <input type="text" id="reg-name" name="name" placeholder="Thabo Mokoena" autocomplete="name" required>
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="reg-email">Email address</label>
-            <div class="input-wrap">
-              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-              <input type="email" id="reg-email" name="email" placeholder="you@school.edu" autocomplete="email" required>
-            </div>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-            <div class="input-group" style="margin-bottom:0">
-              <label for="reg-school">School</label>
-              <input type="text" id="reg-school" name="school" placeholder="School name" required>
-            </div>
-            <div class="input-group" style="margin-bottom:0">
-              <label for="reg-grade">Grade</label>
-              <select id="reg-grade" name="grade" required>
-                <option value="">Select</option>
-                <option>Grade 8</option>
-                <option>Grade 9</option>
-                <option selected>Grade 10</option>
-                <option>Grade 11</option>
-                <option>Grade 12</option>
-              </select>
-            </div>
-          </div>
-          <div class="input-group" style="margin-top:14px;">
-            <label for="reg-password">Password</label>
-            <div class="input-wrap">
-              <span class="input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-              <input type="password" id="reg-password" name="password" placeholder="At least 6 characters" autocomplete="new-password" required>
-            </div>
-          </div>
-          <span class="err-msg" id="reg-err"></span>
-          <button type="submit" class="btn lg form-submit">Create account</button>
-        </form>
-      </div>
-
-      <div class="form-footer">
-        This is a demonstration prototype.<br>
-        No real data is stored. All information lives in your browser.
-      </div>
-
-    </div>
-  </div>
-
 </div>
 
 <script src="mock-data.js"></script>
 <script>
-  // Theme toggle
+  // ── Theme toggle ──────────────────────────────────────────────
   function toggleTheme() {
     const html = document.documentElement;
     html.classList.add('theme-switching');
@@ -448,23 +553,77 @@
     setTimeout(() => html.classList.remove('theme-switching'), 300);
   }
 
-  // Redirect if already logged in
+  // ── Redirect if already logged in ──────────────────────────────
   if (S.auth && S.user) location.href = 'index.html';
 
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    document.querySelectorAll('.form-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
-    const heading = document.getElementById('form-heading');
-    const sub = document.getElementById('form-subheading');
-    if (tab === 'login') {
-      heading.textContent = 'Welcome back';
-      sub.textContent = 'Sign in to continue to your EDORA dashboard.';
-    } else {
-      heading.textContent = 'Create your account';
-      sub.textContent = 'Join EDORA and take control of your education.';
-    }
+  // ── 3D flip between Sign in and Create account ────────────────
+  const flipper  = document.getElementById('flipper');
+  const frontFace = document.querySelector('.face-front');
+  const backFace  = document.querySelector('.face-back');
+
+  function setFlipperHeight() {
+    const active = flipper.classList.contains('flipped') ? backFace : frontFace;
+    // offsetHeight is content-based even while a face is rotated away
+    flipper.style.height = active.offsetHeight + 'px';
   }
 
+  function switchTab(tab) {
+    flipper.classList.toggle('flipped', tab === 'register');
+    requestAnimationFrame(setFlipperHeight);
+  }
+  window.switchTab = switchTab;
+
+  // Measure on load (and again after fonts settle) + on resize
+  window.addEventListener('load', () => {
+    requestAnimationFrame(setFlipperHeight);
+    setTimeout(setFlipperHeight, 250);
+    setTimeout(setFlipperHeight, 700);
+  });
+  window.addEventListener('resize', setFlipperHeight);
+  document.fonts && document.fonts.ready.then(setFlipperHeight);
+
+  // Keep the flipper height in sync with the active face — this lets the
+  // glass card smoothly grow/shrink when an error message appears or the
+  // theme/font changes, without touching the auth handlers.
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(() => setFlipperHeight());
+    ro.observe(frontFace);
+    ro.observe(backFace);
+  }
+
+  // ── Mouse-parallax tilt (disabled for reduced motion / touch / small screens) ──
+  (function () {
+    const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (rm) { document.body.classList.add('rm'); return; }
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.innerWidth < 768) return;
+
+    const stage = document.getElementById('glassStage');
+    const tilt  = document.getElementById('glassTilt');
+    const MAX_TILT = 6;
+    let raf = null, tx = 0, ty = 0;
+
+    function apply() {
+      tilt.style.transform = 'rotateX(' + ty.toFixed(2) + 'deg) rotateY(' + tx.toFixed(2) + 'deg)';
+      raf = null;
+    }
+
+    stage.addEventListener('mousemove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const cx = (e.clientX - r.left) / r.width - 0.5;
+      const cy = (e.clientY - r.top) / r.height - 0.5;
+      tx = cx * MAX_TILT * 2;   // -MAX_TILT..MAX_TILT
+      ty = -cy * MAX_TILT * 2;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      tx = 0; ty = 0;
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+  })();
+
+  // ── Sign in ────────────────────────────────────────────────────
   document.getElementById('login-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const email = this.email.value.trim();
@@ -496,6 +655,7 @@
     err.textContent = 'Incorrect email or password. Try the demo account above.';
   });
 
+  // ── Create account ─────────────────────────────────────────────
   document.getElementById('register-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const name   = this.name.value.trim();
